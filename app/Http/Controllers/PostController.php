@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\PostRequest;
 use App\Models\Post;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
@@ -19,11 +20,27 @@ class PostController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        // request()->validate()
-        dd($request->all());
-        return view('admin.posts.create');
+        if (isset($request->post_image)) {
+            $path = basename($request->file('post_image')->store('public/images'));
+            auth()->user()->posts()->create(
+                [
+                    'title' => $request->title,
+                    'content' => $request->content,
+                    'post_image' => $path,
+                ]
+            );
+        } else {
+            auth()->user()->posts()->create(
+                [
+                    'title' => $request->title,
+                    'content' => $request->content,
+                ]
+            );
+        }
+        // return redirect(route('admin.index'));
+        return back();
     }
 
 

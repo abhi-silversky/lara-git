@@ -18,7 +18,7 @@ class PostFactory extends Factory
     public function definition()
     {
         return [
-            'title' => fake()->title,
+            'title' => fake()->sentence(),
             'content' => fake()->paragraph(),
             'post_image' => fake()->imageUrl(),
             'user_id' => User::pluck('id')->random()

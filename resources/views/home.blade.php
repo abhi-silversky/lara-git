@@ -1,17 +1,15 @@
 <x-home-master>
     @section('content')
-        <h1 class="my-4">Page Heading
-            <small>Secondary Text</small>
+        <h1 class="my-4">Posts List
         </h1>
 
 
         <!-- Blog Post -->
         @foreach ($posts as $post)
             <div class="card mb-4">
-                {{-- http://placehold.it/750x300 --}}
                 <img class="card-img-top" height="500px" width="500px" src="{{ $post->post_image }}" alt="Card image cap">
                 <div class="card-body">
-                    <h2 class="card-title">{{ $post->title }}</h2>
+                    <h2 class="card-title">{{ Str::limit($post->title, 100, ' . . .') }}</h2>
                     <p class="card-text">{{ Str::limit($post->content, 125, ' . . .') }}</p>
 
                     <a href="{{ route('posts.show', $post->id) }}" class="btn btn-primary">Read More &rarr;</a>
