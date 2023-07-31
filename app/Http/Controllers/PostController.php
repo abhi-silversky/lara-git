@@ -4,15 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
-use Illuminate\Support\Facades\Auth;
 
 class PostController extends Controller
 {
-    //
 
     public function index()
     {
-        return view('blog-post');
+        $posts = Post::latest()->with('user')->get();
+        return view('admin.posts.index', compact('posts'));
     }
     public function create()
     {
@@ -23,7 +22,7 @@ class PostController extends Controller
     public function store(PostRequest $request)
     {
         if (isset($request->post_image)) {
-            $path = basename($request->file('post_image')->store('public/images'));
+            $path = $request->file('post_image')->store('public/images');
             auth()->user()->posts()->create(
                 [
                     'title' => $request->title,
