@@ -44,7 +44,9 @@
                     </span>
                 @enderror
             </div>
-            <input type="submit" value="Update Post" class='btn btn-outline-primary'>
+            @can('update', $post)
+                <input type="submit" value="Update Post" class='btn btn-outline-primary'>
+            @endcan
         </form>
     @endsection
 

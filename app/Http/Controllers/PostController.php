@@ -53,6 +53,7 @@ class PostController extends Controller
     }
     public function edit(Post $post)
     {
+        // $this->authorize('view', $post);
         // if (auth()->id() != $post->user_id) {
         //     session()->flash('update', 'You are not authorized to edit');
         //     return redirect(route('posts.index'));
@@ -61,6 +62,10 @@ class PostController extends Controller
     }
     public function update(PostRequest $request, Post $post)
     {
+        # policy
+        $this->authorize('update');
+
+
         // if (auth()->id() != $post->user_id) {
         //     session()->flash('update', 'You are not authorized');
         //     return redirect(route('posts.index'));

@@ -50,7 +50,9 @@
                                 @foreach ($posts as $post)
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
-                                        <td><a href="{{ route('posts.showForAdmin',$post->id) }}">{{ Str::limit($post->title, 30, ' ...') }}</a></td>
+                                        <td><a
+                                                href="{{ route('posts.showForAdmin', $post->id) }}">{{ Str::limit($post->title, 30, ' ...') }}</a>
+                                        </td>
                                         <td>{{ Str::limit($post->content, 90, ' ..') }}</td>
                                         <td>
                                             <img class="img-rounded img-fluid rounded" width="200px"
@@ -59,17 +61,21 @@
                                         <td>{{ $post->created_at->format('h:i A F j, Y') }}</td>
                                         <td>{{ $post->user->name }}</td>
                                         <td>
+
                                             <form action="{{ route('posts.edit', $post->id) }}" method="get">
                                                 <input class="btn btn-outline-info" type="submit" value="Edit">
                                             </form>
+
                                         </td>
                                         <td>
+
                                             <form action="{{ route('posts.destroy', ['post' => $post->id]) }}"
                                                 method="post">
                                                 @csrf
                                                 @method('DELETE')
                                                 <input class="btn btn-outline-danger" type="submit" value="Delete">
                                             </form>
+
                                         </td>
                                     </tr>
                                 @endforeach
