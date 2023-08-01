@@ -20,26 +20,18 @@ class PostController extends Controller
 
     public function store(PostRequest $request)
     {
-
-        if (isset($request->post_image)) {
-            $path = $request->file('post_image')->store('public/images');
-            auth()->user()->posts()->create(
-                [
-                    'title' => $request->title,
-                    'content' => $request->content,
-                    'post_image' => $path,
-                ]
-            );
-        } else {
-            auth()->user()->posts()->create(
-                [
-                    'title' => $request->title,
-                    'content' => $request->content,
-                ]
-            );
+        if ($request->has('post_image')) {
+            $request->post_image = $request->file('post_image')->store('public/images');
         }
-        // return redirect(route('admin.index'));
-        return back();
+
+        auth()->user()->posts()->create(
+            [
+                'title' => $request->title,
+                'content' => $request->content,
+                'post_image' => $request->post_image,
+            ]
+        );
+        return redirect(route('posts.index'));
     }
 
 
