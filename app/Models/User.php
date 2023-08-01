@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -50,5 +52,30 @@ class User extends Authenticatable
     public function posts()
     {
         return $this->hasMany(Post::class); // one to many relationship with Post model (
+    }
+
+
+    /// accessor
+    protected function name(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value) {
+                return ucwords($value);
+            },
+            set: function ($value) {
+                return strtolower(trim($value));
+            }
+        );
+    }
+    protected function email(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value) {
+                return $value;
+            },
+            set: function ($value) {
+                return strtolower(trim($value));
+            }
+        );
     }
 }

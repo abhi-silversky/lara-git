@@ -40,7 +40,7 @@
                                             <img class="img-rounded" height="100px" width="100px"
                                                 src="{{ $post->post_image }}" alt="404">
                                         </td>
-                                        <td>{{ $post->created_at }}</td>
+                                        <td>{{ $post->created_at->format('h:i A F j, Y') }}</td>
                                         <td>{{ $post->user->name }}</td>
                                     </tr>
                                 @endforeach
