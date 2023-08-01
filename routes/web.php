@@ -22,7 +22,7 @@ use App\Http\Controllers\PostController;
 
 Auth::routes();
 
-Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('islogin');
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
 
 

@@ -18,9 +18,9 @@ class PostController extends Controller
         return view('admin.posts.create');
     }
 
-
     public function store(PostRequest $request)
     {
+
         if (isset($request->post_image)) {
             $path = $request->file('post_image')->store('public/images');
             auth()->user()->posts()->create(
