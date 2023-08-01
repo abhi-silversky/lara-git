@@ -4,6 +4,11 @@
 
     @section('content')
         <h1>Create Post</h1>
+        @if (session()->has('message'))
+            <div class="alert alert-success">
+                <h3>{{ session('message') }}</h3>
+            </div>
+        @endif
         <form action="{{ route('posts.store') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class=form-group>

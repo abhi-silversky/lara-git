@@ -5,7 +5,11 @@
             <!-- DataTales Example -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+                    @if (session()->has('message'))
+                        <div class="alert alert-danger">
+                            <h3>{{ session('message') }}</h3>
+                        </div>
+                    @endif
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -18,6 +22,7 @@
                                     <th>Image</th>
                                     <th>Created@</th>
                                     <th>Creator</th>
+                                    <th>Delete</th>
                                 </tr>
                             </thead>
                             <tfoot>
@@ -28,6 +33,7 @@
                                     <th>Image</th>
                                     <th>Created@</th>
                                     <th>Creator</th>
+                                    <th>Delete</th>
                                 </tr>
                             </tfoot>
                             <tbody>
@@ -42,6 +48,13 @@
                                         </td>
                                         <td>{{ $post->created_at->format('h:i A F j, Y') }}</td>
                                         <td>{{ $post->user->name }}</td>
+                                        <td>
+                                            <form action="{{ route('posts.destroy', $post->id) }}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <input class="btn btn-outline-danger" type="submit" value="Delete">
+                                            </form>
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

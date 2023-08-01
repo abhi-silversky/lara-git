@@ -31,7 +31,9 @@ class PostController extends Controller
                 'post_image' => $request->post_image,
             ]
         );
-        return redirect(route('posts.index'));
+        session()->flash('message', 'Post Created successfully');
+        // return redirect(route('posts.index'));
+        return back();
     }
 
 
@@ -40,5 +42,11 @@ class PostController extends Controller
         $post = Post::whereId($post)->with('user')->get()[0];
         // dd($post);
         return view('blog-post', compact('post'));
+    }
+    public function destroy($id)
+    {
+        Post::destroy($id);
+        session()->flash('message', 'Post archived successfully');
+        return back();
     }
 }
