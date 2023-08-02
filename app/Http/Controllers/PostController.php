@@ -11,7 +11,19 @@ class PostController extends Controller
 
     public function index()
     {
-        $posts = Post::latest()->with('user')->get();
+        // $posts = Post::latest()->with('user')->paginate(3);
+        // $posts = Post::with('user')->paginate(3);
+        $posts = Post::paginate(4, ['*'], 'pagenumber');
+        /*
+        $posts = Post::latest()->with('user')->paginate(
+            $perPage = 15, $columns = ['*'], $pageName = 'users'
+        );
+
+        # with path name
+            $posts->withPath('./posts');
+        # with suffix
+             $posts = Post::latest()->with('user')->paginate(1)->fragment('users');
+        */
         return view('admin.posts.index', compact('posts'));
     }
     public function create()
@@ -62,9 +74,6 @@ class PostController extends Controller
     }
     public function update(PostRequest $request, Post $post)
     {
-        # policy
-        $this->authorize('update');
-
 
         // if (auth()->id() != $post->user_id) {
         //     session()->flash('update', 'You are not authorized');

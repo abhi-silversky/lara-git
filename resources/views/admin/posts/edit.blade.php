@@ -11,7 +11,7 @@
         @endif
         <form action="{{ route('posts.update', $post->id) }}" method="post" enctype="multipart/form-data">
             @csrf
-            @method('PUT')
+            @method('PATCH')
             <div class=form-group>
                 <label for="title">Title:</label><br />
                 <input type="text" name="title" class="form-control @error('title') is-invalid @enderror"

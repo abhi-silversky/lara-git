@@ -84,6 +84,9 @@
                     </div>
                 </div>
             </div>
+
+
+            {{ $posts->onEachSide(5)->links('pagination::bootstrap-5') }}
         @endsection
 
 
