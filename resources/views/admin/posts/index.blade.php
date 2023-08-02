@@ -1,7 +1,12 @@
 <x-admin-master>
-
     @section('content')
-        <h3 class="text-left">All posts</h1>
+        <h3 class="text-left">
+            @if (auth()->user()->isAdmin())
+                All posts
+            @else
+                My posts
+            @endIf
+            </h1>
             <!-- DataTales Example -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
@@ -86,7 +91,7 @@
             </div>
 
 
-            {{ $posts->onEachSide(5)->links('pagination::bootstrap-5') }}
+            {{ $posts->links('pagination::bootstrap-5') }}
         @endsection
 
 

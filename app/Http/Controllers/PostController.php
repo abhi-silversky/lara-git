@@ -107,4 +107,9 @@ class PostController extends Controller
     {
         return view('admin.posts.show', compact('post'));
     }
+    public function myPosts()
+    {
+        $posts = auth()->user()->posts()->paginate(10);
+        return view('admin.posts.index', compact('posts'));
+    }
 }

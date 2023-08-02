@@ -45,6 +45,15 @@ class User extends Authenticatable
     ];
 
 
+
+    public function isAdmin() {
+        $roles = $this->roles;
+        foreach ($roles as $role) {
+            if($role->slug === 'admin') return true;
+        }
+        return false;
+    }
+
     public function post()
     {
         return $this->hasOne(Post::class); // one to many relationship with Post model (
@@ -53,6 +62,24 @@ class User extends Authenticatable
     {
         return $this->hasMany(Post::class); // one to many relationship with Post model (
     }
+
+
+    /*
+        # Permissions
+    */
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class);
+    }
+    /*
+        # roles
+    */
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
+
+
 
 
     /// accessor
