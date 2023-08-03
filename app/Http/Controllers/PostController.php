@@ -4,26 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
-use Illuminate\Support\Facades\Request;
 
 class PostController extends Controller
 {
 
     public function index()
     {
-        // $posts = Post::latest()->with('user')->paginate(3);
-        // $posts = Post::with('user')->paginate(3);
-        $posts = Post::paginate(4, ['*'], 'pagenumber');
-        /*
-        $posts = Post::latest()->with('user')->paginate(
-            $perPage = 15, $columns = ['*'], $pageName = 'users'
-        );
-
-        # with path name
-            $posts->withPath('./posts');
-        # with suffix
-             $posts = Post::latest()->with('user')->paginate(1)->fragment('users');
-        */
+        $posts = auth()->user()->posts()->paginate(10);
         return view('admin.posts.index', compact('posts'));
     }
     public function create()
@@ -106,7 +93,5 @@ class PostController extends Controller
     }
     public function myPosts()
     {
-        $posts = auth()->user()->posts()->paginate(10);
-        return view('admin.posts.index', compact('posts'));
     }
 }

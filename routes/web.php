@@ -3,7 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
 
@@ -39,10 +40,10 @@ Route::middleware('auth')->group(function () {
 
     Route::get('admin', [AdminController::class, 'index'])->name('admin.index');
     Route::post('admin/posts/', [PostController::class, "store"])->name('posts.store');
-    Route::get('admin/posts/', [PostController::class, "index"])->name('posts.index');
-    Route::get('admin/my-posts/', [PostController::class, "myPosts"])->name('posts.my');
+    Route::get('admin/posts/', [AdminPostController::class, "index"])->name('posts.index');
+    Route::get('admin/my-posts/', [PostController::class, "index"])->name('posts.my');
     Route::get('admin/posts/create', [PostController::class, "create"])->name('posts.create');
-    Route::get('admin/posts/{post}/', [PostController::class, "showForAdmin"])->name('posts.showForAdmin');
+    Route::get('admin/posts/{post}/', [AdminPostController::class, "show"])->name('posts.showForAdmin');
     Route::get('admin/posts/{post}/edit', [PostController::class, "edit"])->name('posts.edit')->middleware("can:update,post");
     Route::patch('admin/posts/{post}', [PostController::class, "update"])->name('posts.update')->middleware("can:update,post");
     Route::delete('admin/posts/{post}', [PostController::class, "destroy"])->name('posts.destroy')->middleware("can:delete,post");
