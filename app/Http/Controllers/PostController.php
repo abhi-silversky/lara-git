@@ -55,10 +55,6 @@ class PostController extends Controller
     }
     public function destroy(Post $post)
     {
-        if (auth()->id() != $post->user_id) {
-            session()->flash('delete', 'You are not authorized to delete');
-            return redirect(route('posts.index'));
-        }
         $post->delete();
         session()->flash('delete', 'Post archived successfully');
         return back();
@@ -90,6 +86,7 @@ class PostController extends Controller
         // $post->save();
 
         # 2
+        $data = [];
         if ($request->has('post_image')) {
             $data['post_image'] = $request->file('post_image')->store('public/images');
         }

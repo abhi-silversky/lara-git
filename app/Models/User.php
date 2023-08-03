@@ -21,6 +21,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
+        'avatar',
         'email',
         'password',
     ];
@@ -46,10 +48,11 @@ class User extends Authenticatable
 
 
 
-    public function isAdmin() {
+    public function isAdmin()
+    {
         $roles = $this->roles;
         foreach ($roles as $role) {
-            if($role->slug === 'admin') return true;
+            if ($role->slug === 'admin') return true;
         }
         return false;
     }
@@ -102,6 +105,17 @@ class User extends Authenticatable
             },
             set: function ($value) {
                 return strtolower(trim($value));
+            }
+        );
+    }
+    protected function avatar(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value) {
+                return asset("storage/avatars\\$value");
+            },
+            set: function ($value) {
+                return basename($value);
             }
         );
     }

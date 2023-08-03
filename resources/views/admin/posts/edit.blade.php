@@ -1,7 +1,5 @@
 <x-admin-master>
 
-
-
     @section('content')
         <h1>Update Post</h1>
         @if (session()->has('message'))

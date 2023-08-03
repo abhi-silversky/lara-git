@@ -10,17 +10,17 @@
             <!-- DataTales Example -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                    @if (session()->has('delete'))
+                    @if (session()->has('error'))
                         <div class="alert alert-danger">
-                            <h3>{{ session('delete') }}</h3>
+                            <h3>{{ session('error') }}</h3>
                         </div>
-                    @elseif (session()->has('update'))
+                    @elseif (session()->has('success'))
                         <div class="alert alert-success">
-                            <h3>{{ session('update') }}</h3>
+                            <h3>{{ session('success') }}</h3>
                         </div>
-                    @elseif (session()->has('create'))
+                    @elseif (session()->has('warning'))
                         <div class="alert alert-warning">
-                            <h3>{{ session('update') }}</h3>
+                            <h3>{{ session('warning') }}</h3>
                         </div>
                     @endif
                 </div>
