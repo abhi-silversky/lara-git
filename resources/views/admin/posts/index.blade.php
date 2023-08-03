@@ -1,7 +1,7 @@
 <x-admin-master>
     @section('content')
         <h3 class="text-left">
-            @if (auth()->user()->isAdmin())
+            @if (auth()->user()->userHasRole('admin'))
                 All posts
             @else
                 My posts
@@ -67,20 +67,16 @@
                                         <td>{{ $post->user->name }}</td>
                                         <td>
 
-                                            <form action="{{ route('posts.edit', $post->id) }}" method="get">
-                                                <input class="btn btn-outline-info" type="submit" value="Edit">
-                                            </form>
-
+                                            <a class="btn btn-outline-info"
+                                                href="{{ route('posts.edit', $post->id) }}">Edit</a>
                                         </td>
                                         <td>
-
                                             <form action="{{ route('posts.destroy', ['post' => $post->id]) }}"
                                                 method="post">
                                                 @csrf
                                                 @method('DELETE')
                                                 <input class="btn btn-outline-danger" type="submit" value="Delete">
                                             </form>
-
                                         </td>
                                     </tr>
                                 @endforeach

@@ -18,14 +18,15 @@
                 @endif
             </div>
             <div class="col-sm-4">
-                <form action="{{ route('users.profile.update') }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('users.update', $user->id) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
                     <div class="form-group mb-4">
-                        <img width="100px" class = "img-profile rounded-circle d-block" src="{{ $user->avatar }}" alt="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png">
+                        <img width="100px" class="img-profile rounded-circle d-block" src="{{ $user->avatar }}"
+                            alt="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png">
                     </div>
                     <div class="form-group @error('avatar') is-invalid @enderror">
-                        <input type="file" name="avatar" class = "form-control">
+                        <input type="file" name="avatar" class="form-control">
                     </div>
                     @error('avatar')
                         <span class="invalid-feedback" role="alert">
@@ -35,11 +36,7 @@
 
                     <div class="form-group @error('name') is-invalid @enderror">
                         <label for="name">Name</label>
-                        <input type="text"
-                               class="form-control"
-                               name="name"
-                               value="{{ $user->name }}"
-                        >
+                        <input type="text" class="form-control" name="name" value="{{ $user->name }}">
                     </div>
                     @error('name')
                         <span class="invalid-feedback" role="alert">
@@ -48,11 +45,7 @@
                     @enderror
                     <div class="form-group @error('username') is-invalid @enderror">
                         <label for="username">username</label>
-                        <input type="text"
-                               class="form-control"
-                               name="username"
-                               value="{{ $user->username }}"
-                        >
+                        <input type="text" class="form-control" name="username" value="{{ $user->username }}">
                     </div>
                     @error('username')
                         <span class="invalid-feedback" role="alert">
@@ -62,11 +55,7 @@
 
                     <div class="form-group @error('email') is-invalid @enderror">
                         <label for="email">Email</label>
-                        <input type="email"
-                               class="form-control"
-                               name="email"
-                               value="{{ $user->email }}"
-                        >
+                        <input type="email" class="form-control" name="email" value="{{ $user->email }}">
                     </div>
                     @error('email')
                         <span class="invalid-feedback" role="alert">
@@ -76,10 +65,7 @@
 
                     <div class="form-group @error('password') is-invalid @enderror">
                         <label for="password">Password</label>
-                        <input type="password"
-                               class="form-control"
-                               name="password"
-                        >
+                        <input type="password" class="form-control" name="password">
                     </div>
                     @error('password')
                         <span class="invalid-feedback" role="alert">
@@ -88,10 +74,7 @@
                     @enderror
                     <div class="form-group @error('password_confirmation') is-invalid @enderror">
                         <label for="password">Confirm Password</label>
-                        <input type="password"
-                               class="form-control"
-                               name="password_confirmation"
-                        >
+                        <input type="password" class="form-control" name="password_confirmation">
                     </div>
 
                     <div class="form-group">

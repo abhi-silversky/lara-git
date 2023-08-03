@@ -8,11 +8,8 @@
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Custom Components:</h6>
             <a class="collapse-item" href="{{ route('posts.create') }}">Create post</a>
-            @if (auth()->user()->isAdmin())
-                <a class="collapse-item" href="{{ route('posts.index') }}">View all posts</a>
-            @else
-                <a class="collapse-item" href="{{ route('posts.my') }}">My post</a>
-            @endIf
+            <a class="collapse-item" href="{{ route('posts.index') }}">View all posts</a>
+            <a class="collapse-item" href="{{ route('posts.my') }}">My post</a>
         </div>
     </div>
 </li>

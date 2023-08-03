@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class IsLogin
+class RoleMiddleware
 {
     /**
      * Handle an incoming request.
@@ -14,13 +14,10 @@ class IsLogin
      * @param  \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, $role)
     {
-        if (auth()->user()) {
-            if (auth()->user()->userHasRole('admin')) {
-                return redirect(route('admin.users.index'));
-            }
-            return redirect(route('posts.index'));
+        if (!$request->user()->userHasRole($role)) {
+            abort(403, "You are not authorized to this operation");
         }
         return $next($request);
     }

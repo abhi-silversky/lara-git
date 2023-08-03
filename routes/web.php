@@ -25,7 +25,10 @@ use App\Http\Controllers\Admin\UserController as AdminUserController;
 
 Auth::routes();
 
-Route::get('/', [HomeController::class, 'index'])->name('home')->middleware('islogin');
+Route::get('/', function () {
+    return redirect('/posts');
+});
+Route::get('/posts', [HomeController::class, 'index'])->name('home')->middleware('islogin');
 Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show');
 
 
@@ -40,19 +43,38 @@ Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show')
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('admin', [AdminController::class, 'index'])->name('admin.index');
-    Route::post('admin/posts/', [PostController::class, "store"])->name('posts.store');
-    Route::get('admin/posts/', [AdminPostController::class, "index"])->name('posts.index');
-    Route::get('admin/my-posts/', [PostController::class, "index"])->name('posts.my');
-    Route::get('admin/posts/create', [PostController::class, "create"])->name('posts.create');
-    Route::get('admin/posts/{post}/', [AdminPostController::class, "show"])->name('posts.showForAdmin');
-    Route::get('admin/posts/{post}/edit', [PostController::class, "edit"])->name('posts.edit')->middleware("can:update,post");
-    Route::patch('admin/posts/{post}', [PostController::class, "update"])->name('posts.update')->middleware("can:update,post");
-    Route::delete('admin/posts/{post}', [PostController::class, "destroy"])->name('posts.destroy')->middleware("can:delete,post");
+    Route::get('users', [AdminController::class, 'index'])->name('user.index');
+    Route::get('users/my-posts', [PostController::class, "myPosts"])->name('posts.my');
+    Route::get('users/posts', [PostController::class, "index"])->name('posts.index');
+
+    Route::get('users/posts/create', [PostController::class, "create"])->name('posts.create');
+    Route::get('users/posts/{post}', [AdminPostController::class, "show"])->name('posts.showForAdmin');
+
+    Route::get('users/posts/{post}/edit', [PostController::class, "edit"])->name('posts.edit')->middleware("can:update,post");
+    Route::post('users/posts/', [PostController::class, "store"])->name('posts.store');
+
+    Route::patch('users/posts/{post}', [PostController::class, "update"])->name('posts.update')->middleware("can:update,post");
+    Route::delete('users/posts/{post}', [PostController::class, "destroy"])->name('posts.destroy')->middleware("can:delete,post");
 
 
-    Route::get('admin/update/profile', [AdminController::class, "edit"])->name('admin.profile.edit');
-    Route::patch('admin/update/profile', [AdminController::class, "update"])->name('users.profile.update');
+    // user updation form for logged-in user & any user(by admin)
+    Route::middleware('can:view,user')->group(function () {
+        Route::get('user/{user}/profile', [UserController::class, "edit"])->name('users.edit');
+        Route::patch('user/{user}/profile', [UserController::class, "update"])->name('users.update');
+    });
 
-    Route::get('admin/users', [AdminUserController::class, "index"])->name('users.index');
+
+
+    /*
+     *  only admin operation
+    */
+    Route::prefix("admin")->middleware(['role:admin'])->group(function () {
+        Route::get('/', [AdminController::class, 'index'])->name('admin.index');
+        Route::get('users', [AdminUserController::class, "index"])->name('admin.users.index');
+        Route::get('users/{user}', [AdminUserController::class, "show"])->name('admin.users.show');
+        Route::get('users/create', [AdminUserController::class, "create"])->name('admin.users.create');
+        Route::delete('users/{user}', [AdminUserController::class, "destroy"])->name('admin.users.destroy');
+        Route::get('users/{user}/edit', [AdminUserController::class, "edit"])->name('admin.users.edit');
+        Route::patch('users/{user}', [AdminUserController::class, "update"])->name('admin.users.update');
+    });
 });

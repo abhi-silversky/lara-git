@@ -25,7 +25,7 @@ class HomeController extends Controller
     public function index()
     {
         // $posts = Post::latest()->take(5)->get(); // // 2 3 4 6 7 8
-        $posts = Post::with('user')->latest()->take(5)->get(); // // 2 3 4 6 7 8
+        $posts = Post::with('user')->latest()->paginate(10); // // 2 3 4 6 7 8
         // dd($posts);
         return view('home', compact('posts'));
     }

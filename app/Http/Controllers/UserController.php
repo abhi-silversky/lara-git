@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -55,9 +56,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(User $user)
     {
-        //
+        // $this->authorize('view', [$user]);
+        return view('admin.users.profile', compact('user'));
     }
 
     /**
@@ -67,9 +69,28 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request, User $user)
     {
-        //
+        $data =
+            [
+                'name' => $request->name,
+                'email' => $request->email,
+                'username' => $request->username
+            ];
+        if ($request->has('password')) {
+            $data['password'] = bcrypt($request->password);
+        }
+        if ($request->has('avatar')) {
+            $data['avatar'] = $request->file('avatar')->store('public/avatars');
+        }
+        try {
+            if ($user->update($data)) {
+                session()->flash("success", "Your profile updated");
+            } else session()->flash("warning", "Nothing changed");
+        } catch (Throwable $th) {
+            session()->flash("error", "Something went wrong");
+        }
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -80,6 +101,5 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
     }
 }

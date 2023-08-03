@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Throwable;
 
 class UserController extends Controller
 {
@@ -69,9 +71,29 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(UpdateUserRequest $request)
     {
-        //
+        $user = auth()->user();
+        $data =
+            [
+                'name' => $request->name,
+                'email' => $request->email,
+                'username' => $request->username
+            ];
+        if ($request->has('password')) {
+            $data['password'] = bcrypt($request->password);
+        }
+        if ($request->has('avatar')) {
+            $data['avatar'] = $request->file('avatar')->store('public/avatars');
+        }
+        try {
+            if ($user->update($data)) {
+                session()->flash("success", "Your profile updated");
+            } else session()->flash("warning", "Nothing changed");
+        } catch (Throwable $th) {
+            session()->flash("error", "Something went wrong");
+        }
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -80,8 +102,16 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(User $user)
     {
-        //
+        try {
+            if ($user->delete())
+                session()->flash('success', 'User deleted');
+            else
+                session()->flash('warning', 'User already deleted');
+        } catch (Throwable $th) {
+            session()->flash('error', 'Something went wrong');
+        }
+        return back();
     }
 }

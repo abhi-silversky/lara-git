@@ -1,7 +1,7 @@
 <x-admin-master>
 @section('content')
 <h3 class="text-left">
-    @if (auth()->user()->isAdmin())
+    @if (auth()->user()->userHasRole('admin'))
         All users
     @else
         My users
@@ -44,7 +44,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a
-                                        href="{{ route('posts.showForAdmin', $user->name) }}">{{ $user->name }}</a>
+                                        href="{{ route('admin.users.show', $user->id) }}">{{ $user->name }}</a>
                                 </td>
                                 <td>{{ Str::limit($user->email, 90, ' ..') }}</td>
                                 <td>{{ $user->username }}</td>
@@ -54,21 +54,16 @@
                                         src="{{ $user->avatar }}" alt="404">
                                 </td>
                                 <td>
-
-                                    <form action="{{ route('posts.edit', $user->id) }}" method="get">
-                                        <input class="btn btn-outline-info" type="submit" value="Edit">
-                                    </form>
-
+                                    <a class="btn btn-outline-info"
+                                    href="{{ route('users.edit', $user->id) }}">Edit</a>
                                 </td>
                                 <td>
-
-                                    <form action="{{ route('posts.destroy', $user->id) }}"
-                                        method="user">
+                                    <form action="{{ route('admin.users.destroy', $user->id) }}"
+                                        method="post">
                                         @csrf
                                         @method('DELETE')
                                         <input class="btn btn-outline-danger" type="submit" value="Delete">
                                     </form>
-
                                 </td>
                             </tr>
                             @empty <h2>Users not found</h2>

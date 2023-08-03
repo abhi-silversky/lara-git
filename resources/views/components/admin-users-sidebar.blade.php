@@ -7,12 +7,10 @@
     <div id="collapseUser" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
         <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Custom Components:</h6>
-            <a class="collapse-item" href="#">Register user</a>
-            @if (auth()->user()->isAdmin())
-                <a class="collapse-item" href="#">All Users</a>
-            @else
-                <a class="collapse-item" href="#">My post</a>
-            @endIf
+            <a class="collapse-item" href="{{ route('admin.users.create') }}">Register user</a>
+            @if (auth()->user()->userHasRole('admin'))
+                <a class="collapse-item" href="{{ route('admin.users.index') }}">All Users</a>
+            @endif
         </div>
     </div>
 </li>

@@ -10,7 +10,7 @@ class PostController extends Controller
 
     public function index()
     {
-        $posts = auth()->user()->posts()->paginate(10);
+        $posts = Post::latest()->paginate(10);
         return view('admin.posts.index', compact('posts'));
     }
     public function create()
@@ -93,5 +93,7 @@ class PostController extends Controller
     }
     public function myPosts()
     {
+        $posts = auth()->user()->posts()->paginate(10);
+        return view('admin.posts.index', compact('posts'));
     }
 }

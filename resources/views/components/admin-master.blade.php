@@ -10,7 +10,7 @@
     <meta name="author" content="">
 
     <title>
-        @if (auth()->user()->isAdmin())
+        @if (auth()->user()->userHasRole('admin'))
             Admin DashBoard
         @else
             User DashBoard
@@ -68,8 +68,10 @@
             <x-admin-posts-sidebar>
             </x-admin-posts-sidebar>
 
-            <x-admin-users-sidebar>
-            </x-admin-users-sidebar>
+            @if (auth()->user()->userHasRole('admin'))
+                <x-admin-users-sidebar>
+                </x-admin-users-sidebar>
+            @endif
 
 
 
