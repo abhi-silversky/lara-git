@@ -108,7 +108,7 @@ class User extends Authenticatable
             }
         );
     }
-    protected function avatar(): Attribute
+    protected function avasdtar(): Attribute
     {
         return Attribute::make(
             get: function ($value) {
@@ -116,6 +116,17 @@ class User extends Authenticatable
             },
             set: function ($value) {
                 return basename($value);
+            }
+        );
+    }
+    protected function avatar(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value) {
+                return strpos($value, 'http') === 0 ? $value : asset('storage/avatars\\') . $value;
+            },
+            set: function ($value) {
+                return strpos($value, 'http') === 0 ? $value : basename($value);
             }
         );
     }

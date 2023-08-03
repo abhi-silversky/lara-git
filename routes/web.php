@@ -4,9 +4,11 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\UserController;
+
+use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,4 +53,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('admin/update/profile', [AdminController::class, "edit"])->name('admin.profile.edit');
     Route::patch('admin/update/profile', [AdminController::class, "update"])->name('users.profile.update');
+
+    Route::get('admin/users', [AdminUserController::class, "index"])->name('users.index');
 });

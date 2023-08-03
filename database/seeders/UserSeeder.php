@@ -17,7 +17,8 @@ class UserSeeder extends Seeder
     {
         //
 
-        User::factory(5)->create();
-        Post::factory(10)->create();
+        User::factory(25)
+            ->has(Post::factory(6))
+            ->create();
     }
 }

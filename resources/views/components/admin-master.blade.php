@@ -68,6 +68,9 @@
             <x-admin-posts-sidebar>
             </x-admin-posts-sidebar>
 
+            <x-admin-users-sidebar>
+            </x-admin-users-sidebar>
+
 
 
             <!-- Nav Item - Utilities Collapse Menu -->
