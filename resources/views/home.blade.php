@@ -12,7 +12,7 @@
                     <h2 class="card-title">{{ Str::limit($post->title, 100, ' . . .') }}</h2>
                     <p class="card-text">{{ Str::limit($post->content, 125, ' . . .') }}</p>
 
-                    <a href="{{ route('posts.show', $post->id) }}" class="btn btn-primary">Read More &rarr;</a>
+                    <a href="{{ route('public.posts.show', $post->id) }}" class="btn btn-primary">Read More &rarr;</a>
                 </div>
                 <div class="card-footer text-muted">
                     Posted on {{ $post->created_at->diffForHumans() }} by

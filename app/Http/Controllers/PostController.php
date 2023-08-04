@@ -45,7 +45,7 @@ class PostController extends Controller
     public function show($post)
     {
         $post = Post::whereId($post)->with('user')->first();
-        return view('blog-post', compact('post'));
+        return view('admin.posts.show', compact('post'));
     }
     public function destroy(Post $post)
     {
@@ -93,9 +93,9 @@ class PostController extends Controller
 
 
     /// showForAdmin
-    public function showForAdmin(Post $post)
+    public function publicShow(Post $post)
     {
-        return view('admin.posts.show', compact('post'));
+        return view('blog-post', compact('post'));
     }
     public function myPosts()
     {
