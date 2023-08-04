@@ -1,4 +1,4 @@
-<x-admin-master>
+<x-admin.admin-master>
     @section('content')
         <div class="container">
             <div class="row justify-content-center">
@@ -87,4 +87,4 @@
             </div>
         </div>
     @endsection
-</x-admin-master>
+</x-admin.admin-master>

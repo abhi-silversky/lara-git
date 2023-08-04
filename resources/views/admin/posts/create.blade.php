@@ -1,4 +1,4 @@
-<x-admin-master>
+<x-admin.admin-master>
 
 
 
@@ -49,4 +49,4 @@
 
 
 
-</x-admin-master>
+</x-admin.admin-master>

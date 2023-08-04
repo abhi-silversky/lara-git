@@ -1,4 +1,5 @@
-<x-admin-master>
+<x-admin.admin-master>
+
     @section('content')
         <h3 class="text-left">
             @if (auth()->user()->userHasRole('admin'))
@@ -60,23 +61,39 @@
                                         </td>
                                         <td>{{ Str::limit($post->content, 90, ' ..') }}</td>
                                         <td>
-                                            <img class="img-rounded img-fluid rounded" width="200px"
+                                            <img class="img-rounded img-fluid rounded" style="width:200px;height:200px;"
                                                 src="{{ $post->post_image }}" alt="404">
                                         </td>
                                         <td>{{ $post->created_at->format('h:i A F j, Y') }}</td>
                                         <td>{{ $post->user->name }}</td>
                                         <td>
 
-                                            <a class="btn btn-outline-info"
-                                                href="{{ route('posts.edit', $post->id) }}">Edit</a>
+                                            @can('update', $post)
+                                                <a class="btn btn-outline-info"
+                                                    href="{{ route('posts.edit', $post->id) }}">Edit</a>
+                                            @else
+                                                <button class="btn btn-outline-warning">
+                                                    <abbr title="This post not belongs to your account">
+                                                        Edit
+                                                    </abbr>
+                                                </button>
+                                            @endcan
                                         </td>
                                         <td>
-                                            <form action="{{ route('posts.destroy', ['post' => $post->id]) }}"
-                                                method="post">
-                                                @csrf
-                                                @method('DELETE')
-                                                <input class="btn btn-outline-danger" type="submit" value="Delete">
-                                            </form>
+                                            @can('delete', $post)
+                                                <form action="{{ route('posts.destroy', ['post' => $post->id]) }}"
+                                                    method="post">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <input class="btn btn-outline-danger" type="submit" value="Delete">
+                                                </form>
+                                            @else
+                                                <button class="btn btn-outline-warning">
+                                                    <abbr title="This post not belongs to your account">
+                                                        Delete
+                                                    </abbr>
+                                                </button>
+                                            @endcan
                                         </td>
                                     </tr>
                                 @endforeach
@@ -96,4 +113,4 @@
             <script src="{{ asset('js/datatable-script.js') }}"></script>
         @endsection
 
-</x-admin-master>
+</x-admin.admin-master>

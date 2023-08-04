@@ -1,4 +1,4 @@
-<x-admin-master>
+<x-admin.admin-master>
 
     @section('content')
         <h1>Update Post</h1>
@@ -50,4 +50,4 @@
 
 
 
-</x-admin-master>
+</x-admin.admin-master>

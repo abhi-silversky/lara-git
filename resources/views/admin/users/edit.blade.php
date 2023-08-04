@@ -1,4 +1,4 @@
-<x-admin-master>
+<x-admin.admin-master>
     @section('content')
         <h2>{{ $user->name }} profile</h2>
         <div class="row">
@@ -21,8 +21,9 @@
                 <form action="{{ route('users.update', $user->id) }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @method('PATCH')
+                    <div class="mb-4"></div>
                     <div class="form-group mb-4">
-                        <img width="100px" class="img-profile rounded-circle d-block" src="{{ $user->avatar }}"
+                        <img width="250px" class="rounded mx-auto d-block" src="{{ $user->avatar }}"
                             alt="https://upload.wikimedia.org/wikipedia/commons/d/d1/Image_not_available.png">
                     </div>
                     <div class="form-group @error('avatar') is-invalid @enderror">
@@ -84,5 +85,11 @@
                 </form>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+
+            </div>
+        </div>
     @endsection
-</x-admin-master>
+</x-admin.admin-master>

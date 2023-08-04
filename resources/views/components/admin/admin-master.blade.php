@@ -50,7 +50,13 @@
 
             <!-- Nav Item - Dashboard -->
             <li class="nav-item">
-                <a class="nav-link" href="{{ route('admin.index') }}">
+                <a class="nav-link"
+                href="
+                @if (auth()->user()->userHasRole('admin'))
+                    {{{ route('admin.index') }}}
+                @else   {{{ route('posts.index') }}}
+                @endif
+                ">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Dashboard</span></a>
             </li>
@@ -65,12 +71,12 @@
 
             <!-- Nav Item - Pages Collapse Menu -->
 
-            <x-admin-posts-sidebar>
-            </x-admin-posts-sidebar>
+            <x-admin.admin-posts-sidebar>
+            </x-admin.admin-posts-sidebar>
 
             @if (auth()->user()->userHasRole('admin'))
-                <x-admin-users-sidebar>
-                </x-admin-users-sidebar>
+                <x-admin.admin-users-sidebar>
+                </x-admin.admin-users-sidebar>
             @endif
 
 
@@ -332,8 +338,8 @@
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
-                        <x-user-info-navbar>
-                        </x-user-info-navbar>
+                        <x-user.user-info-navbar>
+                        </x-user.user-info-navbar>
 
                     </ul>
 

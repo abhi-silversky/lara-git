@@ -1,4 +1,4 @@
-<x-admin-master>
+<x-admin.admin-master>
     @section('content')
         <h2>Post Details</h2>
         <!-- Title -->
@@ -91,4 +91,4 @@
         </div>
     @endsection
 
-</x-admin-master>
+</x-admin.admin-master>
