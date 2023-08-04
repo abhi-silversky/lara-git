@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -77,8 +78,9 @@ class UserController extends Controller
                 'email' => $request->email,
                 'username' => $request->username
             ];
-        if ($request->has('password')) {
-            $data['password'] = bcrypt($request->password);
+        if ($request->__isset('password')) {
+            dd($request->password);
+            $data['password'] = Hash::make($request->password);
         }
         if ($request->has('avatar')) {
             $data['avatar'] = $request->file('avatar')->store('public/avatars');

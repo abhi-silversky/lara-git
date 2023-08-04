@@ -43,18 +43,20 @@ Route::get('/posts/{post}', [PostController::class, 'show'])->name('posts.show')
 
 Route::middleware('auth')->group(function () {
 
-    Route::get('users', [AdminController::class, 'index'])->name('user.index');
-    Route::get('users/my-posts', [PostController::class, "myPosts"])->name('posts.my');
-    Route::get('users/posts', [PostController::class, "index"])->name('posts.index');
+    Route::prefix('users')->group(function () {
+        Route::get('/', [AdminController::class, 'index'])->name('user.index');
+        Route::get('my-posts', [PostController::class, "myPosts"])->name('posts.my');
+        Route::get('posts', [PostController::class, "index"])->name('posts.index');
 
-    Route::get('users/posts/create', [PostController::class, "create"])->name('posts.create');
-    Route::get('users/posts/{post}', [AdminPostController::class, "show"])->name('posts.showForAdmin');
+        Route::get('posts/create', [PostController::class, "create"])->name('posts.create');
+        Route::get('posts/{post}', [AdminPostController::class, "show"])->name('posts.showForAdmin');
 
-    Route::get('users/posts/{post}/edit', [PostController::class, "edit"])->name('posts.edit')->middleware("can:update,post");
-    Route::post('users/posts/', [PostController::class, "store"])->name('posts.store');
+        Route::get('posts/{post}/edit', [PostController::class, "edit"])->name('posts.edit')->middleware("can:update,post");
+        Route::post('posts/', [PostController::class, "store"])->name('posts.store');
 
-    Route::patch('users/posts/{post}', [PostController::class, "update"])->name('posts.update')->middleware("can:update,post");
-    Route::delete('users/posts/{post}', [PostController::class, "destroy"])->name('posts.destroy')->middleware("can:delete,post");
+        Route::patch('posts/{post}', [PostController::class, "update"])->name('posts.update')->middleware("can:update,post");
+        Route::delete('posts/{post}', [PostController::class, "destroy"])->name('posts.destroy')->middleware("can:delete,post");
+    });
 
 
     // user updation form for logged-in user & any user(by admin)
