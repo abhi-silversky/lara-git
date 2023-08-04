@@ -44,7 +44,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td><a
-                                        href="{{ route('admin.users.show', $user->id) }}">{{ $user->name }}</a>
+                                    href="{{ route('users.edit',$user->id) }}">{{ $user->name }}</a>
                                 </td>
                                 <td>{{ Str::limit($user->email, 90, ' ..') }}</td>
                                 <td>{{ $user->username }}</td>

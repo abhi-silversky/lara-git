@@ -48,7 +48,6 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return view('admin.users.profile', compact('user'));
     }
 
     /**
@@ -59,8 +58,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        // $this->authorize('view', [$user]);
-        return view('admin.users.profile', compact('user'));
+        return view('admin.users.edit', compact('user'));
     }
 
     /**
@@ -87,10 +85,13 @@ class UserController extends Controller
         }
         try {
             if ($user->update($data)) {
-                session()->flash("success", "Your profile updated");
+                session()->flash("success", "Profile updated");
             } else session()->flash("warning", "Nothing changed");
         } catch (Throwable $th) {
             session()->flash("error", "Something went wrong");
+        }
+        if($request->user()->userHasRole('admin')) {
+            return redirect()->route('admin.users.index');
         }
         return redirect()->route('posts.index');
     }

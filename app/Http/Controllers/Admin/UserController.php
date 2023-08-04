@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\storeUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Throwable;
 
 class UserController extends Controller
@@ -17,7 +19,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::oldest()->paginate(10, ['*'], 'pagenumber');
+        $users = User::latest()->paginate(10, ['*'], 'pagenumber');
         return view('admin.users.index', compact('users'));
     }
 
@@ -28,7 +30,7 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.users.create');
     }
 
     /**
@@ -37,9 +39,24 @@ class UserController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        //
+        // dd($request->all());
+        $user = User::create([
+            'name' => $request['name'],
+            'username' => $request['username'],
+            'email' => $request['email'],
+            'password' => Hash::make($request['password']),
+        ]);
+        try {
+            if ($user)
+                session()->flash('success', 'User Created successfully');
+            else
+                session()->flash('warning', 'User not created');
+        } catch (\Throwable $th) {
+            session()->flash('success', 'Something went wrong');
+        }
+        return redirect()->route('admin.users.index');
     }
 
     /**
@@ -61,7 +78,6 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
     }
 
     /**

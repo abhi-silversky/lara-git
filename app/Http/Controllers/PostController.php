@@ -24,14 +24,21 @@ class PostController extends Controller
             $request->post_image = $request->file('post_image')->store('public/images');
         }
 
-        auth()->user()->posts()->create(
+        $post = auth()->user()->posts()->create(
             [
                 'title' => $request->title,
                 'content' => $request->content,
                 'post_image' => $request->post_image,
             ]
         );
-        session()->flash('create', 'Post Created successfully');
+        try {
+            if ($post)
+                session()->flash('success', 'Post Created successfully');
+            else
+                session()->flash('warning', 'Post not created');
+        } catch (\Throwable $th) {
+            session()->flash('success', 'Something went wrong');
+        }
         return redirect(route('posts.index'));
     }
 
@@ -42,8 +49,14 @@ class PostController extends Controller
     }
     public function destroy(Post $post)
     {
-        $post->delete();
-        session()->flash('delete', 'Post archived successfully');
+        try {
+            if ($post->delete())
+                session()->flash('success', 'Post archived successfully');
+            else
+                session()->flash('warning', 'Post not exists');
+        } catch (\Throwable $th) {
+            session()->flash('success', 'Something went wrong');
+        }
         return back();
     }
     public function edit(Post $post)
