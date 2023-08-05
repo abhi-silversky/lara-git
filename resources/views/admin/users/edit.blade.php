@@ -122,7 +122,9 @@
                                         @if ($user->userHasRoleId($role->id))
                                             <button class="btn btn-outline-secondary">Attach</button>
                                     <td>
-                                        @if (auth()->user()->userHasRole('admin'))
+                                        @if (auth()->user()->userHasRole('admin') &&
+                                                auth()->id() != $user->id &&
+                                                $role->slug != 'user')
                                             <form action="{{ route('user.role.detach', $user) }}" method="post">
                                                 @csrf
                                                 @method('PATCH')

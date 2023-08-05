@@ -25,14 +25,23 @@ class UserController extends Controller
         // $users = User::latest()->paginate(10, ['*'], 'pagenumber');
         // $users = User::with(
         //     ['roles' => function (BelongsToMany $query) {
-        //         $query->where('roles.slug', '<>', 'db-manager');
+        //         $query->where('roles.slug', '<>', 'admin');
         //     }]
         // )->get();
 
-        $users = User::WhereHas('roles', function (Builder $query) {
-            $query->where('slug', '<>', 'admin');
-        }, '>=', 1)->get(); // get all users who are not admins
+        // $users = User::WhereHas('roles', function (Builder $query) {
+        //     $query->where('slug', '<>', 'admin');
+        // }, '>=', 1)->get(); // get all users who are not admins
 
+        // $authorizedRoles = Role::whereNot('slug', 'admin')->get()->pluck('id')->toArray();
+        // dd($authorizedRoles);
+        // $users = User::whereHas('roles', function ($query) use ($authorizedRoles) {
+        //     $query->whereIn('ixd', $authorizedRoles);
+        // })->get();
+
+        $users = User::whereDoesntHave('roles', function (Builder $query) {
+            $query->where('slug', 'admin');
+        })->get();
         // dd($users);
         return view('admin.users.index', compact('users'));
     }
@@ -64,7 +73,7 @@ class UserController extends Controller
         ]);
         try {
             if ($user) {
-                $user->roles()->attach(7,['created_at'=>now(),'updated_at'=>now()]);
+                $user->roles()->attach(7, ['created_at' => now(), 'updated_at' => now()]);
                 session()->flash('success', 'User Created successfully');
             } else
                 session()->flash('warning', 'User not created');

@@ -52,16 +52,24 @@
                                 <tr>
                                     <td class="text-center">{{ $loop->iteration }}</td>
                                     <td class="text-center">
-                                        <a href="{{ route('admin.roles.edit', $role->id) }}">{{ $role->name }}</a>
+                                        @if (Str::contains($role->slug, ['admin', 'user']))
+                                            {{ $role->name }}
+                                        @else
+                                            <a href="{{ route('admin.roles.edit', $role->id) }}">{{ $role->name }}</a>
+                                        @endif
                                     </td>
                                     <td class="text-center">{{ $role->slug }}</td>
                                     <td class="text-center">{{ $role->created_at->format('h:i A,  F j, Y') }}</td>
                                     <td class="text-center">
-                                        <form action="{{ route('admin.roles.destroy', $role->id) }}" method="post">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class='btn btn-outline-danger'>Delete</button>
-                                        </form>
+                                        @if (Str::contains($role->slug, ['admin', 'user']))
+                                            <button class='btn btn-outline-warning'>Delete</button>
+                                        @else
+                                            <form action="{{ route('admin.roles.destroy', $role->id) }}" method="post">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class='btn btn-outline-danger'>Delete</button>
+                                            </form>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach

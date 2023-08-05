@@ -61,8 +61,9 @@
                                         </td>
                                         <td>{{ Str::limit($post->content, 90, ' ..') }}</td>
                                         <td>
-                                            <img class="img-rounded img-fluid rounded" style="width:200px;height:200px;"
-                                                src="{{ $post->post_image }}" alt="404">
+                                            <img draggable="false" class="img-rounded img-fluid rounded"
+                                                style="width:200px;height:200px;" src="{{ $post->post_image }}"
+                                                alt="404">
                                         </td>
                                         <td>{{ $post->created_at->format('h:i A F j, Y') }}</td>
                                         <td>{{ $post->user->name }}</td>

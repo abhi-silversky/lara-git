@@ -59,5 +59,4 @@ Route::get('/usr', function () {
 
     // ddd($user->load('roles'));
 
-
 });
