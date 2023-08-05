@@ -44,17 +44,18 @@ Route::get('public/posts/{post}', [PostController::class, 'publicShow'])->name('
 
 Route::middleware('auth')->group(function () {
     // user updation form for logged-in user & any user(by admin)
-    Route::middleware('can:view,user')->group(function () {
-        Route::get('user/{user}/profile', [UserController::class, "edit"])->name('users.edit');
-        Route::patch('user/{user}/profile', [UserController::class, "update"])->name('users.update');
-    });
+    Route::get('user/{user}/profile', [UserController::class, "edit"])->name('users.edit');
+    Route::patch('user/{user}/profile', [UserController::class, "update"])->name('users.update');
 });
 
 
 Route::get('/usr', function () {
     $user = User::find(2);
-    $user = $user->whereId($user->id)->with('roles')->first();
-    dd($user);
-    $roles = $user->roles->pluck('id')->toArray();
-    dd($roles);
+    // $user = $user->whereId($user->id)->with('roles')->first();
+    // dd($user);
+    // $roles = $user->roles->pluck('id')->toArray();
+    // dd($roles);
+
+    // ddd($user->load('roles'));
+    return;
 });

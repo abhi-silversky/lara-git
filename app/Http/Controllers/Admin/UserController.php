@@ -7,6 +7,7 @@ use App\Http\Requests\storeUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Throwable;
@@ -21,6 +22,13 @@ class UserController extends Controller
     public function index()
     {
         $users = User::latest()->paginate(10, ['*'], 'pagenumber');
+        // $users = User::with(
+        //     ['roles' => function (BelongsToMany $query) {
+        //         $query->where('roles.slug', '<>', 'admin');
+        //     }]
+        // )->get();
+
+        // dd($users);
         return view('admin.users.index', compact('users'));
     }
 
@@ -58,27 +66,6 @@ class UserController extends Controller
             session()->flash('success', 'Something went wrong');
         }
         return redirect()->route('admin.users.index');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
     }
 
     /**

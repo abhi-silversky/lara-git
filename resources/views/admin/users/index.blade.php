@@ -81,7 +81,7 @@
             </div>
 
 
-            {{ $users->links('pagination::bootstrap-5') }}
+            {{-- {{ $users->links('pagination::bootstrap-5') }} --}}
         @endsection
 
 
