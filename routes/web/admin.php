@@ -9,20 +9,19 @@ use App\Http\Controllers\UserController;
 
 Route::get('/', [AdminController::class, 'index'])->name('admin.index');
 
-Route::get('users', [AdminUserController::class, "index"])->name('admin.users.index');
 
-Route::get('users/create', [AdminUserController::class, "create"])->name('admin.users.create');
-Route::post('users/', [AdminUserController::class, "store"])->name('admin.users.register');
+Route::prefix('users')->group(function () {
+    Route::get('/', [AdminUserController::class, "index"])->name('admin.users.index');
 
-Route::get('users/{user}', [AdminUserController::class, "show"])->name('admin.users.show');
-Route::get('users/{user}/edit', [AdminUserController::class, "edit"])->name('admin.users.edit');
+    Route::get('create', [AdminUserController::class, "create"])->name('admin.users.create');
+    Route::post('/', [AdminUserController::class, "store"])->name('admin.users.register');
 
-Route::delete('users/{user}', [AdminUserController::class, "destroy"])->name('admin.users.destroy');
-Route::patch('users/{user}', [AdminUserController::class, "update"])->name('admin.users.update');
+    Route::get('{user}', [AdminUserController::class, "show"])->name('admin.users.show');
+    Route::get('{user}/edit', [AdminUserController::class, "edit"])->name('admin.users.edit');
 
+    Route::delete('{user}', [AdminUserController::class, "destroy"])->name('admin.users.destroy');
+    Route::patch('{user}', [AdminUserController::class, "update"])->name('admin.users.update');
 
-// Route::patch('/user/{user}/role/{role}/detach', [AdminUserController::class, 'attachRole'])->name('role.attach');
-// Route::patch('/user/{user}/role/{role}/detach', [AdminUserController::class, 'detachRole'])->name('role.detach');
-
-Route::patch('/user/{user}/role/attach', [AdminUserController::class, 'attachRole'])->name('user.role.attach');
-Route::patch('/user/{user}/role/detach', [AdminUserController::class, 'detachRole'])->name('user.role.detach');
+    Route::patch('{user}/role/attach', [AdminUserController::class, 'attachRole'])->name('user.role.attach');
+    Route::patch('{user}/role/detach', [AdminUserController::class, 'detachRole'])->name('user.role.detach');
+});
