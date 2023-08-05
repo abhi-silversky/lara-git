@@ -61,8 +61,8 @@ class UserController extends Controller
     {
         // $user = $user->whereId($user->id)->with('roles')->first();
         $user = $user->load('roles');
-        // ddd($user);
-        // return;
+        $this->authorize('view', $user);
+
         $roles = Role::all();
         return view('admin.users.edit', compact('user', 'roles'));
     }
@@ -77,5 +77,31 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
+    }
+    public function update(UpdateUserRequest $request, User $user)
+    {
+        $data =
+            [
+                'name' => $request->name,
+                'email' => $request->email,
+                'username' => $request->username
+            ];
+        if ($request->filled('password')) {
+            $data['password'] = bcrypt($request->password);
+        }
+        if ($request->has('avatar')) {
+            $data['avatar'] = $request->file('avatar')->store('public/avatars');
+        }
+        try {
+            if ($user->update($data)) {
+                session()->flash("success", "Your profile updated");
+            } else session()->flash("warning", "Nothing changed");
+        } catch (\Throwable $th) {
+            session()->flash("error", "Something went wrong");
+        }
+        if (auth()->user()->userHasRole('admin')) {
+            return redirect()->route('admin.users.index');
+        }
+        return redirect()->route('posts.index');
     }
 }

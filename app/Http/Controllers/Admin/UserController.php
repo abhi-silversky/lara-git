@@ -7,6 +7,7 @@ use App\Http\Requests\storeUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -21,12 +22,16 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->paginate(10, ['*'], 'pagenumber');
+        // $users = User::latest()->paginate(10, ['*'], 'pagenumber');
         // $users = User::with(
         //     ['roles' => function (BelongsToMany $query) {
-        //         $query->where('roles.slug', '<>', 'admin');
+        //         $query->where('roles.slug', '<>', 'db-manager');
         //     }]
         // )->get();
+
+        $users = User::WhereHas('roles', function (Builder $query) {
+            $query->where('slug', '<>', 'admin');
+        }, '>=', 1)->get(); // get all users who are not admins
 
         // dd($users);
         return view('admin.users.index', compact('users'));
@@ -58,9 +63,10 @@ class UserController extends Controller
             'password' => Hash::make($request['password']),
         ]);
         try {
-            if ($user)
+            if ($user) {
+                $user->roles()->attach(7,['created_at'=>now(),'updated_at'=>now()]);
                 session()->flash('success', 'User Created successfully');
-            else
+            } else
                 session()->flash('warning', 'User not created');
         } catch (\Throwable $th) {
             session()->flash('success', 'Something went wrong');

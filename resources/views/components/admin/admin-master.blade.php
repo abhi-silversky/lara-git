@@ -76,6 +76,8 @@
             @if (auth()->user()->userHasRole('admin'))
                 <x-admin.admin-users-sidebar>
                 </x-admin.admin-users-sidebar>
+                <x-admin.admin-authorization-sidebar>
+                </x-admin.admin-authorization-sidebar>
             @endif
 
 

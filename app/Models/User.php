@@ -50,10 +50,12 @@ class User extends Authenticatable
 
     public function userHasRole(string $user_role)
     {
-        $roles = $this->roles;
-        foreach ($roles as $role) {
-            if ($role->slug == $user_role) return true;
-        }
+        // $roles = $this->roles;
+        // foreach ($roles as $role) {
+        //     if ($role->slug == $user_role) return true;
+        // }
+        $roles = $this->roles->pluck('slug')->toArray();
+        if (in_array($user_role, $roles, true)) return true;
         return false;
     }
     public function userHasRoleId($role_id)
