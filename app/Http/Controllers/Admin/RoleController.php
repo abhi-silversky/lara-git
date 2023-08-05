@@ -43,12 +43,20 @@ class RoleController extends Controller
                 'name' => ['required', 'min:3', 'string']
             ]
         );
-        Role::create(
+        $role =  Role::create(
             [
                 'name' => Str::ucfirst($request->name),
                 'slug' => Str::of(Str::lower($request->name))->slug('-'),
             ]
         );
+        try {
+            if ($role)
+                session()->flash('success', "Role \"$request->name\" Created successfully");
+            else
+                session()->flash('warning', "Role \"$request->name\" not exists");
+        } catch (\Throwable $th) {
+            session()->flash('success', 'Something went wrong');
+        }
         return back();
     }
 
@@ -69,9 +77,9 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Role $role)
     {
-        //
+        return view('admin.roles.edit', compact('role'));
     }
 
     /**
@@ -81,9 +89,29 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Role $role)
     {
-        //
+        $request->validate(
+            [
+                'name' => ['required', 'min:3', 'string']
+            ]
+        );
+
+        try {
+            $role->update(
+                [
+                    'name' => Str::ucfirst($request->name),
+                    'slug' => Str::of(Str::lower($request->name))->slug('-')
+                ]
+            );
+            if ($role->isDirty('name'))
+                session()->flash('success', "Role \"$request->name\" updated successfully");
+            else
+                session()->flash('warning', "Role \"$request->name\" remains same");
+        } catch (\Throwable $th) {
+            session()->flash('success', 'Something went wrong');
+        }
+        return redirect()->route('admin.roles.index');
     }
 
     /**
@@ -92,8 +120,16 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Role $role)
     {
-        //
+        try {
+            if ($role->delete())
+                session()->flash('success', "Role \"$role->name\" deleted successfully");
+            else
+                session()->flash('warning', 'Role not exists');
+        } catch (\Throwable $th) {
+            session()->flash('success', 'Something went wrong');
+        }
+        return back();
     }
 }

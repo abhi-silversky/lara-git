@@ -80,21 +80,28 @@ class UserController extends Controller
     }
     public function update(UpdateUserRequest $request, User $user)
     {
-        $data =
-            [
-                'name' => $request->name,
-                'email' => $request->email,
-                'username' => $request->username
-            ];
+        // $data =
+        //     [
+        //         'name' => $request->name,
+        //         'email' => $request->email,
+        //         'username' => $request->username
+        //     ];
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->username = $request->username;
+        $data = [];
         if ($request->filled('password')) {
-            $data['password'] = bcrypt($request->password);
+            // $data['password'] = bcrypt($request->password);
+            $user->password = bcrypt($request->password);
         }
         if ($request->has('avatar')) {
-            $data['avatar'] = $request->file('avatar')->store('public/avatars');
+            // $data['avatar'] = $request->file('avatar')->store('public/avatars');
+            $user->avatar = $request->file('avatar')->store('public/avatars');
         }
         try {
-            if ($user->update($data)) {
-                session()->flash("success", "Your profile updated");
+            if ($user->isDirty()) {
+                $user->save();
+                session()->flash("success", "\"$user->name\" profile updated");
             } else session()->flash("warning", "Nothing changed");
         } catch (\Throwable $th) {
             session()->flash("error", "Something went wrong");

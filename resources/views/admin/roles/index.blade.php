@@ -40,26 +40,29 @@
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Sr.</th>
-                                <th>Name</th>
-                                <th>slug</th>
-                                <th>Created@</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
+                                <th class="text-center">Sr.</th>
+                                <th class="text-center">Name</th>
+                                <th class="text-center">slug</th>
+                                <th class="text-center">Created@</th>
+                                <th class="text-center">Delete</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($roles as $role)
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>
-                                        {{ $role->name }}
+                                    <td class="text-center">{{ $loop->iteration }}</td>
+                                    <td class="text-center">
+                                        <a href="{{ route('admin.roles.edit', $role->id) }}">{{ $role->name }}</a>
                                     </td>
-                                    <td>{{ $role->slug }}</td>
-                                    <td>{{ $role->created_at->format('h:i A,  F j, Y') }}</td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
+                                    <td class="text-center">{{ $role->slug }}</td>
+                                    <td class="text-center">{{ $role->created_at->format('h:i A,  F j, Y') }}</td>
+                                    <td class="text-center">
+                                        <form action="{{ route('admin.roles.destroy', $role->id) }}" method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class='btn btn-outline-danger'>Delete</button>
+                                        </form>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

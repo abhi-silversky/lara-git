@@ -76,14 +76,18 @@ class PostController extends Controller
         # 2
         $data = [];
         if ($request->has('post_image')) {
-            $data['post_image'] = $request->file('post_image')->store('public/images');
+            // $data['post_image'] = $request->file('post_image')->store('public/images');
+            $post->post_image = $request->file('post_image')->store('public/images');
         }
-        $data['title'] = $request->title;
-        $data['content'] = $request->content;
+        // $data['title'] = $request->title;
+        // $data['content'] = $request->content;
+        $post->title = $request->title;
+        $post->content = $request->content;
         try {
-            if ($post->update($data))
+            if ($post->isDirty(['title', 'content', 'post_image'])) {
+                $post->save(); // fill data & save()
                 session()->flash('success', 'Post updated successfully');
-            else
+            } else
                 session()->flash('warning', 'Nothing changed');
         } catch (\Throwable $th) {
             session()->flash('success', 'Something went wrong');
