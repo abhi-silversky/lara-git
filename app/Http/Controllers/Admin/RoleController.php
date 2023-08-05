@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Str;
 
 class RoleController extends Controller
 {
@@ -16,7 +17,7 @@ class RoleController extends Controller
     public function index()
     {
         $roles = Role::latest()->paginate(20);
-        return view('admin.roles.index',compact('roles'));
+        return view('admin.roles.index', compact('roles'));
     }
 
     /**
@@ -37,7 +38,18 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate(
+            [
+                'name' => ['required', 'min:3', 'string']
+            ]
+        );
+        Role::create(
+            [
+                'name' => Str::ucfirst($request->name),
+                'slug' => Str::of(Str::lower($request->name))->slug('-'),
+            ]
+        );
+        return back();
     }
 
     /**
