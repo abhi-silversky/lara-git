@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -58,7 +59,9 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('admin.users.edit', compact('user'));
+        $user = $user->whereId($user->id)->with('roles')->first();
+        $roles = Role::all();
+        return view('admin.users.edit', compact('user', 'roles'));
     }
 
     /**
@@ -90,7 +93,7 @@ class UserController extends Controller
         } catch (Throwable $th) {
             session()->flash("error", "Something went wrong");
         }
-        if($request->user()->userHasRole('admin')) {
+        if ($request->user()->userHasRole('admin')) {
             return redirect()->route('admin.users.index');
         }
         return redirect()->route('posts.index');

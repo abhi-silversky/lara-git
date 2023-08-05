@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
@@ -47,4 +48,13 @@ Route::middleware('auth')->group(function () {
         Route::get('user/{user}/profile', [UserController::class, "edit"])->name('users.edit');
         Route::patch('user/{user}/profile', [UserController::class, "update"])->name('users.update');
     });
+});
+
+
+Route::get('/usr', function () {
+    $user = User::find(2);
+    $user = $user->whereId($user->id)->with('roles')->first();
+    dd($user);
+    $roles = $user->roles->pluck('id')->toArray();
+    dd($roles);
 });

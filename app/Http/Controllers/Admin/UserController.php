@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\storeUserRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -128,6 +129,19 @@ class UserController extends Controller
         } catch (Throwable $th) {
             session()->flash('error', 'Something went wrong');
         }
+        return back();
+    }
+
+
+    public function attachRole(Request $request, User $user)
+    {
+        // $user->roles()->attach($role);
+        $user->roles()->attach($request->role);
+        return back();
+    }
+    public function detachRole(Request $request, User $user)
+    {
+        $user->roles()->detach($request->role);
         return back();
     }
 }

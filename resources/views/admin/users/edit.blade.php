@@ -79,17 +79,106 @@
                     </div>
 
                     <div class="form-group">
-                        <input type="submit">
+                        <input type="submit" class="btn btn-outline-success">
                     </div>
 
                 </form>
             </div>
         </div>
 
-        <div class="row">
+        <div class="row md-2">
+            <h3 class="text-left mb-4">
+                Roles Action
+            </h3>
             <div class="col-sm-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Sr.</th>
+                                <th>Status</th>
+                                <th>Name</th>
+                                <th>slug</th>
+                                <th>Attach</th>
+                                <th>Detach</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse ($roles as $role)
+                                <tr>
+                                    <td> {{ $loop->iteration }}</td>
+                                    <td>
+                                        <input type="checkbox" name="checkbox" class="checkbox"
+                                            @foreach ($user->roles as $user_role)
+                                            @if ($user_role->slug == $role->slug)
+                                            checked
+                                            @endif @endforeach
+                                            id="">
+                                    </td>
 
+                                    <td> {{ $role->name }} </td>
+                                    <td> {{ $role->slug }}</td>
+                                    <td>
+                                        @if ($user->userHasRoleId($role->id))
+                                            <button class="btn btn-outline-secondary">Attach</button>
+                                    <td>
+                                        @if (auth()->user()->userHasRole('admin'))
+                                            <form action="{{ route('user.role.detach', $user) }}" method="post">
+                                                @csrf
+                                                @method('PATCH')
+                                                <input type="hidden" name="role" value="{{ $role->id }}">
+                                                <input class="btn btn-outline-danger" type="submit" value="Detach">
+                                            </form>
+                                        @else
+                                            <button class="btn btn-outline-secondary">Detach</button>
+                                        @endif
+                                    </td>
+                                @else
+                                    @if (auth()->user()->userHasRole('admin'))
+                                        <form action="{{ route('user.role.attach', ['user' => $user->id]) }}"
+                                            method="post">
+                                            @csrf
+                                            @method('PATCH')
+                                            <input type="hidden" name="role" value="{{ $role->id }}">
+                                            <input class="btn btn-outline-primary" type="submit" value="Attach">
+                                        </form>
+                                    @else
+                                        <button class="btn btn-outline-secondary">Attach</button>
+                                    @endif
+                                    <td>
+                                        <button class="btn btn-outline-secondary">Detach</button>
+                                    </td>
+                            @endif
+                            </td>
+
+                            </tr>
+                        @empty <tr>
+                                <td>Emptry array</td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     @endsection
 </x-admin.admin-master>
+
+
+{{-- @if ($user->userHasRoleId($role->id))
+<form
+    action="{{ route('role.detach', ['user_id' => $user->id, 'role_id' => $role->id]) }}"
+    method="post">
+    @csrf
+    @method('PATCH')
+    <input class="btn btn-outline-danger" type="submit" value="Detach">
+</form>
+@else
+<form
+    action="{{ route('role.detach', ['user_id' => $user->id, 'role_id' => $role->id]) }}"
+    method="post">
+    @csrf
+    @method('PATCH')
+    <input class="btn btn-outline-primary" type="submit" value="Detach">
+</form>
+@endif --}}

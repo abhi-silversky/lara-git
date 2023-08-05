@@ -6,7 +6,7 @@
             @else
                 My users
             @endIf
-            </h1>
+            </h3>
             <!-- DataTales Example -->
             <div class="card shadow mb-4">
                 <div class="card-header py-3">

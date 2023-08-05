@@ -56,6 +56,13 @@ class User extends Authenticatable
         }
         return false;
     }
+    public function userHasRoleId($role_id)
+    {
+        $user_roles = $this->roles->pluck('id')->toArray();
+        if (in_array($role_id, $user_roles))
+            return true;
+        return false;
+    }
 
     public function post()
     {

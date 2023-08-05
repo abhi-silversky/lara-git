@@ -1,8 +1,11 @@
 <?php
 
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\UserController;
 
 Route::get('/', [AdminController::class, 'index'])->name('admin.index');
 
@@ -16,3 +19,10 @@ Route::get('users/{user}/edit', [AdminUserController::class, "edit"])->name('adm
 
 Route::delete('users/{user}', [AdminUserController::class, "destroy"])->name('admin.users.destroy');
 Route::patch('users/{user}', [AdminUserController::class, "update"])->name('admin.users.update');
+
+
+// Route::patch('/user/{user}/role/{role}/detach', [AdminUserController::class, 'attachRole'])->name('role.attach');
+// Route::patch('/user/{user}/role/{role}/detach', [AdminUserController::class, 'detachRole'])->name('role.detach');
+
+Route::patch('/user/{user}/role/attach', [AdminUserController::class, 'attachRole'])->name('user.role.attach');
+Route::patch('/user/{user}/role/detach', [AdminUserController::class, 'detachRole'])->name('user.role.detach');
