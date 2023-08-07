@@ -1,12 +1,25 @@
 <x-admin.admin-master>
 
     @section('content')
-        <h3 class="text-left">
-            Roles List
-        </h3>
+        <div class="row">
+            <div class="col-sm-3">
+                <form action="{{ route('permissions.store') }}" method="post">
+                    @csrf
+                    <label class="form-group" for="name">Permission Name</label><br>
+                    <input class="form-group @error('name') is-invalid  @enderror" type="text" name="name" id="name">
+                    @error('name')
+                        <span class="invalid-feedback mb-2" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror()
+                    <input class="btn  btn-outline-info mb-4" type="submit" value="Create">
+                </form>
+            </div>
+        </div>
         <!-- DataTales Example -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
+                <h2>Permissions List</h2>
                 @if (session()->has('error'))
                     <div class="alert alert-danger">
                         <h3>{{ session('error') }}</h3>
@@ -30,7 +43,6 @@
                                 <th>Name</th>
                                 <th>slug</th>
                                 <th>Created@</th>
-                                <th>Edit</th>
                                 <th>Delete</th>
                             </tr>
                         </thead>
@@ -38,14 +50,20 @@
                             @foreach ($permissions as $permission)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $permission->name }}</td>
+                                    <td><a
+                                            href="{{ route('permissions.edit', $permission->id) }}">{{ $permission->name }}</a>
+                                    </td>
                                     <td>{{ $permission->slug }}</td>
                                     <td>{{ $permission->created_at->format('h:i A F j, Y') }}</td>
-                                    <td></td>
                                     <td>
+                                        <form action="{{ route('permissions.destroy', $permission->id) }}" method="post">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class='btn btn-outline-danger'>Delete</button>
+                                        </form>
                                     </td>
-                                    <td>
-                                    </td>
+
+
                                 </tr>
                             @endforeach
                         </tbody>

@@ -20,4 +20,12 @@ class Role extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
+
+    public function roleHasPermissionId(int $permission_id) {
+        $roles_permissions = $this->permissions->pluck('id')->toArray();
+        if (in_array($permission_id, $roles_permissions))
+            return true;
+        return false;
+    }
 }

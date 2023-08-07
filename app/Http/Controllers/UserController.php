@@ -60,7 +60,7 @@ class UserController extends Controller
     public function edit(User $user)
     {
         // $user = $user->whereId($user->id)->with('roles')->first();
-        $user = $user->load('roles');
+        $user->load('roles');
         $this->authorize('view', $user);
 
         $roles = Role::all();

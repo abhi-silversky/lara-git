@@ -29,21 +29,23 @@ class UserController extends Controller
         //     }]
         // )->get();
 
+
         // $users = User::WhereHas('roles', function (Builder $query) {
         //     $query->where('slug', '<>', 'admin');
         // }, '>=', 1)->get(); // get all users who are not admins
 
+
         // $authorizedRoles = Role::whereNot('slug', 'admin')->get()->pluck('id')->toArray();
         // dd($authorizedRoles);
         // $users = User::whereHas('roles', function ($query) use ($authorizedRoles) {
-        //     $query->whereIn('ixd', $authorizedRoles);
+        //     $query->whereIn('id', $authorizedRoles);
         // })->get();
 
         $users = User::whereDoesntHave('roles', function (Builder $query) {
             $query->where('slug', 'admin');
         })->get();
-        // dd($users);
         return view('admin.users.index', compact('users'));
+        // dd($users);
     }
 
     /**

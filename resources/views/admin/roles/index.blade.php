@@ -52,16 +52,17 @@
                                 <tr>
                                     <td class="text-center">{{ $loop->iteration }}</td>
                                     <td class="text-center">
-                                        @if (Str::contains($role->slug, ['admin', 'user']))
+                                        {{-- @if (in_array($role->slug, ['admin', 'user']))
                                             {{ $role->name }}
                                         @else
                                             <a href="{{ route('admin.roles.edit', $role->id) }}">{{ $role->name }}</a>
-                                        @endif
+                                        @endif --}}
+                                        <a href="{{ route('admin.roles.edit', $role->id) }}">{{ $role->name }}</a>
                                     </td>
                                     <td class="text-center">{{ $role->slug }}</td>
                                     <td class="text-center">{{ $role->created_at->format('h:i A,  F j, Y') }}</td>
                                     <td class="text-center">
-                                        @if (Str::contains($role->slug, ['admin', 'user']))
+                                        @if (in_array($role->slug, ['admin', 'user']))
                                             <button class='btn btn-outline-warning'>Delete</button>
                                         @else
                                             <form action="{{ route('admin.roles.destroy', $role->id) }}" method="post">

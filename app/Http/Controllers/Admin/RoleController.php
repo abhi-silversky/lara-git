@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Requests\StoreRoleRequest;
+use App\Http\Requests\UpdateRoleRequest;
+use App\Models\Permission;
 use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
@@ -36,20 +39,15 @@ class RoleController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreRoleRequest $request)
     {
-        $request->validate(
-            [
-                'name' => ['required', 'min:3', 'string']
-            ]
-        );
-        $role =  Role::create(
-            [
-                'name' => Str::ucfirst($request->name),
-                'slug' => Str::of(Str::lower($request->name))->slug('-'),
-            ]
-        );
         try {
+            $role =  Role::create(
+                [
+                    'name' => Str::ucfirst($request->name),
+                    'slug' => Str::of(Str::lower($request->name))->slug('-'),
+                ]
+            );
             if ($role)
                 session()->flash('success', "Role \"$request->name\" Created successfully");
             else
@@ -79,7 +77,9 @@ class RoleController extends Controller
      */
     public function edit(Role $role)
     {
-        return view('admin.roles.edit', compact('role'));
+        $role->load('permissions');
+        $permissions = Permission::all();
+        return view('admin.roles.edit', compact('role', 'permissions'));
     }
 
     /**
@@ -89,24 +89,17 @@ class RoleController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Role $role)
+    public function update(UpdateRoleRequest $request, Role $role)
     {
-        $request->validate(
-            [
-                'name' => ['required', 'min:3', 'string']
-            ]
-        );
 
         try {
-            $role->update(
-                [
-                    'name' => Str::ucfirst($request->name),
-                    'slug' => Str::of(Str::lower($request->name))->slug('-')
-                ]
-            );
-            if ($role->isDirty('name'))
+            $role->name = Str::ucfirst($request->name);
+            $role->slug = Str::of(Str::lower($request->name))->slug('-');
+
+            if ($role->isDirty('name')) {
+                $role->save();
                 session()->flash('success', "Role \"$request->name\" updated successfully");
-            else
+            } else
                 session()->flash('warning', "Role \"$request->name\" remains same");
         } catch (\Throwable $th) {
             session()->flash('success', 'Something went wrong');
@@ -130,6 +123,17 @@ class RoleController extends Controller
         } catch (\Throwable $th) {
             session()->flash('success', 'Something went wrong');
         }
+        return back();
+    }
+
+    public function attachPermission(Request $request, Role $role)
+    {
+        $role->permissions()->attach($request->permission_id);
+        return back();
+    }
+    public function detachPermission(Request $request, Role $role)
+    {
+        $role->permissions()->detach($request->permission_id);
         return back();
     }
 }
