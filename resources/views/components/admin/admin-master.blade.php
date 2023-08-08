@@ -65,7 +65,11 @@
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                Interface
+                @if (auth()->user()->userHasRole('admin'))
+                Admin
+                @else User
+                @endif
+                Operations
             </div>
 
             <!-- Nav Item - Pages Collapse Menu -->
@@ -83,7 +87,7 @@
 
 
             <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
+            {{-- <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
                     aria-expanded="true" aria-controls="collapseUtilities">
                     <i class="fas fa-fw fa-wrench"></i>
@@ -151,7 +155,7 @@
             <!-- Sidebar Toggler (Sidebar) -->
             <div class="text-center d-none d-md-inline">
                 <button class="rounded-circle border-0" id="sidebarToggle"></button>
-            </div>
+            </div> --}}
 
         </ul>
         <!-- End of Sidebar -->
@@ -395,6 +399,7 @@
     <!-- Custom scripts for all pages-->
     <script src="{{ asset('js/sb-admin-2.min.js') }}"></script>
 
+    <script src="{{ asset('js/collapse.js') }}"></script>
     {{-- custome data table scripts --}}
     @yield('scripts')
 

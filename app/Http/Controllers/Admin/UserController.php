@@ -43,7 +43,7 @@ class UserController extends Controller
 
         $users = User::whereDoesntHave('roles', function (Builder $query) {
             $query->where('slug', 'admin');
-        })->get();
+        })->paginate();
         return view('admin.users.index', compact('users'));
         // dd($users);
     }

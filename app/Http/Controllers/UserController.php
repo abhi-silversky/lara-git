@@ -80,22 +80,14 @@ class UserController extends Controller
     }
     public function update(UpdateUserRequest $request, User $user)
     {
-        // $data =
-        //     [
-        //         'name' => $request->name,
-        //         'email' => $request->email,
-        //         'username' => $request->username
-        //     ];
         $user->name = $request->name;
         $user->email = $request->email;
         $user->username = $request->username;
-        $data = [];
+
         if ($request->filled('password')) {
-            // $data['password'] = bcrypt($request->password);
             $user->password = bcrypt($request->password);
         }
         if ($request->has('avatar')) {
-            // $data['avatar'] = $request->file('avatar')->store('public/avatars');
             $user->avatar = $request->file('avatar')->store('public/avatars');
         }
         try {

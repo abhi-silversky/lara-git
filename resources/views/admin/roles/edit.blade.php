@@ -82,8 +82,8 @@
                                                             @method('PATCH')
                                                             <input type="hidden" name="permission_id"
                                                                 value="{{ $permission->id }}">
-                                                            <input class="btn btn-outline-info" type="submit"
-                                                                value="Attach">
+                                                            <button class="btn btn-outline-info" onclick="disableBtn()"
+                                                                id="attach" type="submit">Attach</button>
                                                         </form>
                                                     @endif
                                                 </td>
@@ -116,6 +116,7 @@
             @endif()
             {{-- {{ $permissions->links('pagination::bootstrap-5') }} --}}
         </div>
-    @endsection
 
+        <script src="{{ asset('js\collapseMenu\authorize.js') }}"></script>
+    @endsection
 </x-admin.admin-master>

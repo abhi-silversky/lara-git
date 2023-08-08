@@ -89,6 +89,7 @@
 
             </div>
         </div>
+        <script src="{{ asset('js/collapseMenu/posts.js') }}"></script>
     @endsection
 
 </x-admin.admin-master>

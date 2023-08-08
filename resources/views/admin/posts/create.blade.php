@@ -45,6 +45,7 @@
             <input type="submit" value="Create Post" class='btn btn-outline-primary'>
 
         </form>
+        <script src="{{ asset('js/collapseMenu/posts.js') }}"></script>
     @endsection
 
 

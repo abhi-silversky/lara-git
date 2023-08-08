@@ -80,6 +80,9 @@
             </div>
         </div>
         {{ $roles->links('pagination::bootstrap-5') }}
+
+
+
     @endsection
 
 
@@ -88,6 +91,8 @@
         <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
         <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
         <script src="{{ asset('js/datatable-script.js') }}"></script>
+        {{-- Collapse menu --}}
+        <script src="{{ asset('js\collapseMenu\authorize.js') }}"></script>
     @endsection
 
 </x-admin.admin-master>

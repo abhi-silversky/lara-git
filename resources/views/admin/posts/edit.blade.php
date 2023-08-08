@@ -46,8 +46,7 @@
                 <input type="submit" value="Update Post" class='btn btn-outline-primary'>
             @endcan
         </form>
+
+        <script src="{{ asset('js/collapseMenu/posts.js') }}"></script>
     @endsection
-
-
-
 </x-admin.admin-master>
