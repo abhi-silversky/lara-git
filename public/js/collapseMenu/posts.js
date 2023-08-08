@@ -6,10 +6,10 @@ function openCollapseItem(collapseId) {
         // Show the collapse item
         collapseElement.classList.add('show');
     }
-    if (targetCollapse.classList.contains('show')) {
-        targetCollapse.classList.remove('show');
-    } else {
-        targetCollapse.classList.add('show');
-    }
+    // if (targetCollapse.classList.contains('show')) {
+    //     targetCollapse.classList.remove('show');
+    // } else {
+    //     targetCollapse.classList.add('show');
+    // }
 }
 openCollapseItem('collapsePost');
