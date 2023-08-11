@@ -101,7 +101,6 @@
             </div>
         </div>
 
-        <script src="{{ asset('js/collapseMenu/users.js') }}"></script>
-
+        {{-- <script src="{{ asset('js/collapseMenu/users.js') }}"></script> --}}
     @endsection
 </x-admin.admin-master>

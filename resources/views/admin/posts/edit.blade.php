@@ -47,6 +47,6 @@
             @endcan
         </form>
 
-        <script src="{{ asset('js/collapseMenu/posts.js') }}"></script>
+        {{-- <script src="{{ asset('js/collapseMenu/posts.js') }}"></script> --}}
     @endsection
 </x-admin.admin-master>

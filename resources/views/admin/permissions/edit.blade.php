@@ -19,7 +19,7 @@
                 </form>
             </div>
         </div>
-        <script src="{{ asset('js\collapseMenu\authorize.js') }}"></script>
+        {{-- <script src="{{ asset('js\collapseMenu\authorize.js') }}"></script> --}}
     @endsection
 
 </x-admin.admin-master>
