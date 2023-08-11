@@ -45,7 +45,8 @@
             <input type="submit" value="Create Post" class='btn btn-outline-primary'>
 
         </form>
-        <script src="{{ asset('js/collapseMenu/posts.js') }}"></script>
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     @endsection
 
 

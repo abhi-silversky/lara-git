@@ -12,7 +12,6 @@ class PostController extends Controller
 
     public function index(Request $request)
     {
-        // $posts = Post::latest()->paginate(10);
         if ($request->ajax()) {
             $posts = Post::with('user');
             return DataTables::eloquent($posts)
@@ -32,10 +31,8 @@ class PostController extends Controller
                 ->editColumn('title', function (Post $post) {
                     return view('custom.posts.show')->with('post', $post);
                 })
-                ->rawColumns(['image', 'edit', 'delete'])
                 ->make();
         }
-        // return view('admin.posts.index', compact('posts'));
         return view('admin.posts.index');
     }
     public function create()

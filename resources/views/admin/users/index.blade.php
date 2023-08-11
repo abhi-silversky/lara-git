@@ -26,7 +26,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered" id="users" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>Sr.</th>
@@ -39,7 +39,7 @@
                                 <th>Delete</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        {{-- <tbody>
                             @forelse ($users as $user)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
@@ -74,25 +74,74 @@
                                 </tr>
                             @empty <h2>Users not found</h2>
                             @endforelse
-                        </tbody>
+                        </tbody> --}}
                     </table>
                 </div>
             </div>
         </div>
-
-
-        {{ $users->links('pagination::bootstrap-5') }}
-
     @endsection
 
 
-    @section('scripts')
-        <!-- Page level plugins -->
-        <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
-        <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-        <script src="{{ asset('js/datatable-script.js') }}"></script>
+    @push('yajra-scripts')
+        pos
+        <script>
+            $(document).ready(function() {
+                $('#users').dataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: '{!! route('admin.users.index') !!}',
+                    columns: [{
+                            data: "DT_RowIndex",
+                            orderable: false,
+                            searchable: false,
+                        },
+                        {
+                            data: "name",
+                            name: "name"
+                        },
+                        {
+                            data: "email",
+                            name: "email"
+                        },
+                        {
+                            data: "username",
+                            name: "username",
+                        },
+                        {
+                            data: "created_at",
+                            name: "created_at",
+                        },
+                        {
+                            data: "avatar",
+                            name: "avatar",
+                            orderable: false,
+                            searchable: false,
+                        },
+                        {
+                            data: 'edit',
+                            name: 'edit',
+                            processing: false,
+                            serverSide: false,
+                        },
+                        {
+                            data: 'delete',
+                            name: 'delete',
+                            processing: false,
+                            serverSide: false,
+                        },
+                    ]
+                });
+            });
+        </script>
+    @endpush
 
-        {{-- <script src="{{ asset('js/collapseMenu/users.js') }}"></script> --}}
-    @endsection
-
+    @push('head-script-yajra')
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    @endpush
 </x-admin.admin-master>

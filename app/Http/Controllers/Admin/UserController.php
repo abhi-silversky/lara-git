@@ -12,40 +12,39 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Throwable;
+use Yajra\DataTables\Facades\DataTables;
 
 class UserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function index(Request $request)
     {
-        // $users = User::latest()->paginate(10, ['*'], 'pagenumber');
-        // $users = User::with(
-        //     ['roles' => function (BelongsToMany $query) {
-        //         $query->where('roles.slug', '<>', 'admin');
-        //     }]
-        // )->get();
+        if ($request->ajax()) {
+            $users = User::whereDoesntHave('roles', function (Builder $query) {
+                $query->where('slug', 'admin');
+            });
+            // $users = User::query();
+            return DataTables::eloquent($users)
+                ->addIndexColumn()
+                ->addColumn('avatar', function (User $user) {
+                    return view('custom.users.image-index')->with('user', $user);
+                })
+                ->addColumn('edit', function (User $user) {
+                    return view('custom.users.edit')->with('user', $user);
+                })
+                ->addColumn('delete', function (User $user) {
+                    return view('custom.users.delete')->with('user', $user);
+                })
+                ->editColumn('created_at', function (User $user) {
+                    return $user->created_at->diffForHumans();
+                })
+                ->editColumn('name', function (User $user) {
+                    return view('custom.users.show')->with('user', $user);
+                })
+                ->make();
+        }
 
-
-        // $users = User::WhereHas('roles', function (Builder $query) {
-        //     $query->where('slug', '<>', 'admin');
-        // }, '>=', 1)->get(); // get all users who are not admins
-
-
-        // $authorizedRoles = Role::whereNot('slug', 'admin')->get()->pluck('id')->toArray();
-        // dd($authorizedRoles);
-        // $users = User::whereHas('roles', function ($query) use ($authorizedRoles) {
-        //     $query->whereIn('id', $authorizedRoles);
-        // })->get();
-
-        $users = User::whereDoesntHave('roles', function (Builder $query) {
-            $query->where('slug', 'admin');
-        })->paginate();
-        return view('admin.users.index', compact('users'));
-        // dd($users);
+        return view('admin.users.index');
     }
 
     /**

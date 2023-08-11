@@ -9,18 +9,29 @@ use App\Models\Role;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
+use Yajra\DataTables\Facades\DataTables;
 
 class RoleController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function index(Request $request)
     {
-        $roles = Role::latest()->paginate(10);
-        return view('admin.roles.index', compact('roles'));
+        if ($request->ajax()) {
+            $roles = Role::orderBy('name', 'asc');
+            return DataTables::eloquent($roles)
+                ->addIndexColumn()
+                ->addColumn('delete', function (Role $role) {
+                    return view('custom.roles.delete')->with('role', $role);
+                })
+                ->editColumn('created_at', function (Role $role) {
+                    return $role->created_at->diffForHumans();
+                })
+                ->editColumn('name', function (Role $role) {
+                    return view('custom.roles.edit')->with('role', $role);
+                })
+                ->make();
+        }
+        return view('admin.roles.index');
     }
 
     /**

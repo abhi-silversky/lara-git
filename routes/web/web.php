@@ -58,5 +58,6 @@ Route::get('/usr', function () {
     // dd($roles);
 
     // ddd($user->load('roles'));
-
+    // Str::contains(Route::currentRouteName(),['admin.users.index','posts.index'
+    // ,'posts.my','admin.permissions.index','admin.roles.index','admin.roles.edit'],true)
 });

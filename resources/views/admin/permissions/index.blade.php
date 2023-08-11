@@ -36,7 +36,7 @@
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered" id="permissions" width="100%" cellspacing="0">
                         <thead>
                             <tr>
                                 <th>Sr.</th>
@@ -46,7 +46,7 @@
                                 <th>Delete</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        {{-- <tbody>
                             @foreach ($permissions as $permission)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
@@ -66,22 +66,60 @@
 
                                 </tr>
                             @endforeach
-                        </tbody>
+                        </tbody> --}}
                     </table>
                 </div>
             </div>
         </div>
-        {{ $permissions->links('pagination::bootstrap-5') }}
     @endsection
 
 
-    @section('scripts')
-        <!-- Page level plugins -->
-        <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
-        <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-        <script src="{{ asset('js/datatable-script.js') }}"></script>
+    @push('yajra-scripts')
+        <script>
+            $(document).ready(function() {
+                $('#permissions').dataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: '{!! route('admin.permissions.index') !!}',
+                    columns: [{
+                            data: "DT_RowIndex",
+                            orderable: false,
+                            searchable: false,
+                        },
+                        {
+                            data: "name",
+                            name: "name"
+                        },
+                        {
+                            data: "slug",
+                            name: "slug"
+                        },
+                        {
+                            data: "created_at",
+                            name: "created_at",
+                        },
+                        {
+                            data: 'delete',
+                            name: 'delete',
+                            processing: false,
+                            serverSide: false,
+                        },
+                    ]
+                });
+            });
+        </script>
+    @endpush
 
-        <script src="{{ asset('js\collapseMenu\authorize.js') }}"></script>
-    @endsection
+    @push('head-script-yajra')
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+            integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+
+
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    @endpush
 
 </x-admin.admin-master>

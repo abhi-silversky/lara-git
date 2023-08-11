@@ -9,18 +9,29 @@ use Faker\Provider\ar_EG\Person;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
+use Yajra\DataTables\Facades\DataTables;
 
 class PermissionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function index(Request $request)
     {
-        $permissions = Permission::latest()->paginate(10);
-        return view('admin.permissions.index', compact('permissions'));
+        if ($request->ajax()) {
+            $permissions = Permission::query();
+            return DataTables::eloquent($permissions)
+                ->addIndexColumn()
+                ->addColumn('delete', function (Permission $permission) {
+                    return view('custom.permissions.delete')->with('permission', $permission);
+                })
+                ->editColumn('created_at', function (Permission $permission) {
+                    return $permission->created_at->diffForHumans();
+                })
+                ->editColumn('name', function (Permission $permission) {
+                    return view('custom.permissions.edit')->with('permission', $permission);
+                })
+                ->make();
+        }
+        return view('admin.permissions.index');
     }
 
     /**
@@ -42,6 +53,7 @@ class PermissionController extends Controller
     public function store(StorePermissionRequest $request)
     {
         try {
+            // dd($request->all());
             $permission =  Permission::create(
                 [
                     'name' => Str::ucfirst($request->name),

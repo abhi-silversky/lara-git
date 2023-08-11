@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,6 +30,7 @@
 
 
     @stack('head-script-yajra')
+
 </head>
 
 <body id="page-top">
@@ -389,6 +391,7 @@
     </a>
 
     {{-- <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script> --}}
+    <script src='/vendor/jquery/jquery.min.js'></script>
     {{-- commented bcz i am using yajrabox with js cdn --}}
 
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
@@ -402,7 +405,6 @@
 
     @yield('scripts')
     @stack('yajra-scripts')
-
 </body>
 
 </html>
