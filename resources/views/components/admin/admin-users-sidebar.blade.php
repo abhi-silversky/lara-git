@@ -1,4 +1,4 @@
-<li class="nav-item @if (Str::contains(Route::currentRouteName(), 'users')) active @endif">
+<li class="nav-item @if(Str::contains(Route::currentRouteName(), 'users'))active @endif">
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUser" aria-expanded="true"
         aria-controls="collapseUser">
         <i class="fas fa-fw fa-cog"></i>
