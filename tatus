@@ -1,0 +1,34 @@
+[33m9e8ffee[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m)[m initial commit for yajraDataTable
+[33m3e3e6e9[m useLess option removed from sidebar
+[33mca6bdc6[m useLess option removed from sidebar
+[33m8e7152c[m  sidebar js improved code
+[33me100f09[m  created collapse js file for sidebar behaviour
+[33m09b2e87[m permission list in Role edit page  & Roles-permission (attach & detach) & permission index page & permission creation & permission edit &   permission delete
+[33m6e79870[m in user list only non admin users showed Inhanced logic
+[33mb18b640[m Roles deletion & role updation & used isDirsty() to check changes in models Then give suitable flash message
+[33mf90b225[m roles creation with auto slug using Str class
+[33mee276b4[m roles & permission list in admin panel also create Permission & Role controller
+[33m0c04d64[m non admin users showed in user list & authorization componenet created
+[33m280978a[m load() with model obj & used filled method for key with not null checking
+[33m8a4bd01[m made users group
+[33m21ab9ed[m roles attach & detach from user
+[33mbf1e7d2[m in all user page delete button only for admin & not a same and not logged in
+[33m41885c2[m routes separated & organized
+[33mdfe3939[m user creation with validation]
+[33mefe0dc2[m post updation flash display issue fixed
+[33m6c05303[m password update bug fixed
+[33mb6e2eeb[m user deletion , role & permission , user profile updation, pagination
+[33ma3badb1[m users list showed
+[33maa406a4[m Admin/postcontroller
+[33mf853ded[m userController , User name showed , user profile update ,avatar showed authed user updation & form validation
+[33mbdb100b[m roles & permission create
+[33m5474ab8[m pagination
+[33mc184c5d[m authorization used
+[33me7e4cd1[m  post updation & specific post showed
+[33m587bd6b[m Post deletion & flash message
+[33m0869bce[m accesor & mutator used in post & user model & in Admin all post page created @ modified
+[33m976c5e0[m inhanced logic for post creation
+[33mb8afe62[m IsLogin middleware for Is user already logged in then redirect to admin dashboard
+[33m423cf50[m all post showed at admin side
+[33m52f6a50[m post creation
+[33m6dbff3b[m message: admin login , post view, post creating task completed

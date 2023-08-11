@@ -27,92 +27,95 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <table class="table" id="posts" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th>Sr.</th>
                                     <th>Title</th>
                                     <th>Content</th>
                                     <th>Image</th>
-                                    <th>Created@</th>
                                     <th>Creator</th>
+                                    <th>Created@</th>
                                     <th>Edit</th>
                                     <th>Delete</th>
                                 </tr>
                             </thead>
-                            <tfoot>
-                                <tr>
-                                    <th>Sr.</th>
-                                    <th>Title</th>
-                                    <th>Content</th>
-                                    <th>Image</th>
-                                    <th>Created@</th>
-                                    <th>Creator</th>
-                                    <th>Edit</th>
-                                    <th>Delete</th>
-                                </tr>
-                            </tfoot>
-                            <tbody>
-                                @foreach ($posts as $post)
-                                    <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td><a
-                                                href="{{ route('posts.show', $post->id) }}">{{ Str::limit($post->title, 30, ' ...') }}</a>
-                                        </td>
-                                        <td>{{ Str::limit($post->content, 90, ' ..') }}</td>
-                                        <td>
-                                            <img draggable="false" class="img-rounded img-fluid rounded"
-                                                style="width:200px;height:200px;" src="{{ $post->post_image }}"
-                                                alt="404">
-                                        </td>
-                                        <td>{{ $post->created_at->format('h:i A F j, Y') }}</td>
-                                        <td>{{ $post->user->name }}</td>
-                                        <td>
-
-                                            @can('update', $post)
-                                                <a class="btn btn-outline-info"
-                                                    href="{{ route('posts.edit', $post->id) }}">Edit</a>
-                                            @else
-                                                <button class="btn btn-outline-warning">
-                                                    <abbr title="This post not belongs to your account">
-                                                        Edit
-                                                    </abbr>
-                                                </button>
-                                            @endcan
-                                        </td>
-                                        <td>
-                                            @can('delete', $post)
-                                                <form action="{{ route('posts.destroy', ['post' => $post->id]) }}"
-                                                    method="post">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <input class="btn btn-outline-danger" type="submit" value="Delete">
-                                                </form>
-                                            @else
-                                                <button class="btn btn-outline-warning">
-                                                    <abbr title="This post not belongs to your account">
-                                                        Delete
-                                                    </abbr>
-                                                </button>
-                                            @endcan
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-            {{ $posts->links('pagination::bootstrap-5') }}
+            {{-- {{ $posts->links('pagination::bootstrap-5') }} --}}
         @endsection
 
 
-        @section('scripts')
-            {{-- <script src="{{ asset('js/collapseMenu/posts.js') }}"></script> --}}
-            <!-- Page level plugins -->
-            <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
-            <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-            <script src="{{ asset('js/datatable-script.js') }}"></script>
-        @endsection
 
+
+
+        @push('yajra-scripts')
+            <script>
+                $(document).ready(function() {
+                    $('#posts').dataTable({
+                        processing: true,
+                        serverSide: true,
+                        ajax: '{!! route('posts.index') !!}',
+                        columns: [{
+                                data: "DT_RowIndex",
+                                orderable: false,
+                                searchable: false,
+                            },
+                            {
+                                data: "title",
+                                name: "title"
+                            },
+                            {
+                                data: "content",
+                                name: "content"
+                            },
+                            {
+                                data: "post_image",
+                                name: "post_image",
+                                render: function(data, type, full, meta) {
+                                    return '<img src="' + data + '" alt="Not Available" width="100">';
+                                },
+                                orderable: false,
+                                searchable: false,
+                            },
+                            {
+                                data: "user.name",
+                                name: "user.name",
+                            },
+
+                            {
+                                data: "created_at",
+                                name: "created_at",
+                            },
+                            {
+                                data: 'edit',
+                                name: 'edit',
+                                processing: false,
+                                serverSide: false,
+                            },
+                            {
+                                data: 'delete',
+                                name: 'delete',
+                                processing: false,
+                                serverSide: false,
+                            },
+                        ]
+                    });
+                });
+            </script>
+        @endpush
+
+        @push('head-script-yajra')
+            <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+                integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+            <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+                integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+            <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+            <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+                integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+            <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+        @endpush
 </x-admin.admin-master>

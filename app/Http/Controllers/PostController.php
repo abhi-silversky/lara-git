@@ -4,14 +4,39 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\PostRequest;
 use App\Models\Post;
+use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class PostController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        $posts = Post::latest()->paginate(10);
-        return view('admin.posts.index', compact('posts'));
+        // $posts = Post::latest()->paginate(10);
+        if ($request->ajax()) {
+            $posts = Post::with('user');
+            return DataTables::eloquent($posts)
+                ->addIndexColumn()
+                ->addColumn('image', function (Post $post) {
+                    return view('custom.posts.image-index')->with('post', $post);
+                })
+                ->addColumn('edit', function (Post $post) {
+                    return view('custom.posts.edit')->with('post', $post);
+                })
+                ->addColumn('delete', function (Post $post) {
+                    return view('custom.posts.delete')->with('post', $post);
+                })
+                ->editColumn('created_at', function (Post $post) {
+                    return $post->created_at->diffForHumans();
+                })
+                ->editColumn('title', function (Post $post) {
+                    return view('custom.posts.show')->with('post', $post);
+                })
+                ->rawColumns(['image', 'edit', 'delete'])
+                ->make();
+        }
+        // return view('admin.posts.index', compact('posts'));
+        return view('admin.posts.index');
     }
     public function create()
     {
