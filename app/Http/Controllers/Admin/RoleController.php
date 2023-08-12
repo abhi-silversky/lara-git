@@ -71,17 +71,6 @@ class RoleController extends Controller
         return back();
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
     public function edit(Request $request, Role $role)
     {
         $role->load('permissions');
@@ -107,13 +96,7 @@ class RoleController extends Controller
         return view('admin.roles.edit', compact('role'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(UpdateRoleRequest $request, Role $role)
     {
 
@@ -153,12 +136,44 @@ class RoleController extends Controller
 
     public function attachPermission(Request $request, Role $role)
     {
-        $role->permissions()->attach($request->permission_id);
-        return back();
+        try {
+            $role->permissions()->attach($request->permission_id);
+
+            // $status = Role::where('id', $role->id)->whereHas('permissions', function ($q) use ($request) {
+            //     $q->where('id', $request->permission_id);
+            // })->exists();
+            $status = $role->whereHas('permissions', function ($q) use ($request) {
+                $q->where('id', $request->permission_id);
+            })->exists();
+
+            if ($status) {
+                // session()->flash('success', "Role \"$role->name\" Attached");
+                return redirect()
+                    ->route('admin.roles.edit', ['role' => $role->id])
+                    ->with('success', "Permission Attached");
+            }
+            return redirect()
+                ->route('admin.roles.edit', ['role' => $role->id])
+                ->with('warning', "Permission Not Attached");
+        } catch (\Throwable $th) {
+            return redirect()
+                ->route('admin.roles.edit', ['role' => $role->id])
+                ->with('error', "Something went wrong");
+            // ->with('error', $th->getMessage());
+        }
     }
     public function detachPermission(Request $request, Role $role)
     {
-        $role->permissions()->detach($request->permission_id);
-        return back();
+        try {
+            $role->permissions()->detach($request->permission_id);
+            return redirect()
+                ->route('admin.roles.edit', ['role' => $role->id])
+                ->with('success', "Role Detached");
+        } catch (\Throwable $th) {
+            return redirect()
+                ->route('admin.roles.edit', ['role' => $role->id])
+                ->with('error', "Something went wrong");
+            // ->with('error', $th->getMessage());
+        }
     }
 }

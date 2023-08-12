@@ -39,11 +39,11 @@
                     <table class="table table-bordered" id="permissions" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Sr.</th>
-                                <th>Name</th>
-                                <th>slug</th>
-                                <th>Created@</th>
-                                <th>Delete</th>
+                                <th class = 'text-center'>Sr.</th>
+                                <th class = 'text-center'>Name</th>
+                                <th class = 'text-center'>slug</th>
+                                <th class = 'text-center'>Created@</th>
+                                <th class = 'text-center'>Delete</th>
                             </tr>
                         </thead>
                         {{-- <tbody>

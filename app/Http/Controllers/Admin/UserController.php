@@ -22,7 +22,7 @@ class UserController extends Controller
         if ($request->ajax()) {
             $users = User::whereDoesntHave('roles', function (Builder $query) {
                 $query->where('slug', 'admin');
-            })->latest('updated_at');
+            });
             // $users = User::query();
             return DataTables::eloquent($users)
                 ->addIndexColumn()
@@ -40,7 +40,7 @@ class UserController extends Controller
                 })
                 ->editColumn('name', function (User $user) {
                     return view('custom.users.show')->with('user', $user);
-                })
+                })->setRowClass('text-center')
                 ->make();
         }
 
@@ -139,12 +139,40 @@ class UserController extends Controller
     public function attachRole(Request $request, User $user)
     {
         // $user->roles()->attach($role);
-        $user->roles()->attach($request->role);
-        return back();
+        // return back();
+        try {
+            $user->roles()->attach($request->role);
+
+            $status = $user->whereHas('roles', function ($q) use ($request) {
+                $q->where('id', $request->role);
+            })->exists();
+
+            if ($status) {
+                return redirect()
+                    ->route('users.edit', ['user' => $user->id])
+                    ->with('success', "Role \"$user->name\" Attached");
+            }
+            return redirect()
+                ->route('users.edit', ['user' => $user->id])
+                ->with('warning', "Role \"$user->name\" Not Attached");
+        } catch (\Throwable $th) {
+            return redirect()
+                ->route('users.edit', ['user' => $user->id])
+                ->with('error', "Something went wrong");
+            // ->with('error', $th->getMessage());
+        }
     }
     public function detachRole(Request $request, User $user)
     {
-        $user->roles()->detach($request->role);
-        return back();
+        try {
+            $user->roles()->detach($request->role);
+            return redirect()
+                ->route('users.edit', ['user' => $user->id])
+                ->with('success', "Role Detached");
+        } catch (\Throwable $th) {
+            return redirect()
+                ->route('users.edit', ['user' => $user->id])
+                ->with('warning', "Something went wrong");
+        }
     }
 }

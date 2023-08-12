@@ -32,6 +32,7 @@ class PostController extends Controller
                 ->editColumn('title', function (Post $post) {
                     return view('custom.posts.show')->with('post', $post);
                 })
+                ->setRowClass('text-center')
                 ->make();
         }
         return view('admin.posts.index');
@@ -131,7 +132,8 @@ class PostController extends Controller
     {
         if ($request->ajax()) {
             // $user = auth()->user();
-            $posts = Post::where('user_id', auth()->id())->orderByDesc('posts.created_at')->with('user');
+            // $posts = Post::where('user_id', auth()->id())->orderByDesc('posts.created_at')->with('user');
+            $posts = Post::where('user_id', auth()->id())->with('user');
             return DataTables::of($posts)
                 ->addIndexColumn()
                 ->addColumn('image', function (Post $post) {

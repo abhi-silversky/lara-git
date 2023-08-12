@@ -70,7 +70,7 @@
         <script>
             $(document).ready(function() {
                 $('#permissions').dataTable({
-                    processing: true,
+                    processing: false,
                     serverSide: true,
                     ajax: '{!! route('admin.roles.edit', $role->id) !!}',
                     columns: [{

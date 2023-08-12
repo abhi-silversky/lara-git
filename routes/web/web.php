@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use App\Models\Role;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
@@ -11,6 +12,7 @@ use App\Http\Controllers\UserController;
 
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Models\Permission;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,7 +53,7 @@ Route::middleware('auth')->group(function () {
 
 
 Route::get('/usr', function () {
-    $user = User::find(2);
+    // $user = User::find(2);
     // $user = $user->whereId($user->id)->with('roles')->first();
     // dd($user);
     // $roles = $user->roles->pluck('id')->toArray();
@@ -60,5 +62,25 @@ Route::get('/usr', function () {
     // ddd($user->load('roles'));
     // Str::contains(Route::currentRouteName(),['admin.users.index','posts.index'
     // ,'posts.my','admin.permissions.index','admin.roles.index','admin.roles.edit'],true)
-    dd(User::latest());
+
+
+    $role = Role::find(6);
+    $prm = Permission::find(16);
+    $slug = "delete-post";
+
+
+
+    // $roles = Role::where('id', 6)->whereHas('permissions', function ($q) use ($slug) {
+    //     $q->where('slug', $slug);
+    // })->exists();
+    // $roles = $role->whereHas('permissions', function ($q) use ($slug) {
+    //     $q->where('slug', $slug);
+    // })->exists();
+    // return $roles;
+
+    // $roles = $role->permissions->contains($prm);
+    $roles = Role::where('id',6)->whereHas('permissions', function ($q) {
+        $q->where('id', 16);
+    })->exists();
+    ddd($roles);
 });

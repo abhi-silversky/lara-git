@@ -29,6 +29,7 @@ class PermissionController extends Controller
                 ->editColumn('name', function (Permission $permission) {
                     return view('custom.permissions.edit')->with('permission', $permission);
                 })
+                ->setRowClass('text-center')
                 ->make();
         }
         return view('admin.permissions.index');

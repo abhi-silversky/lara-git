@@ -30,14 +30,14 @@
                         <table class="table" id="posts" width="100%" cellspacing="0">
                             <thead>
                                 <tr>
-                                    <th>Sr.</th>
-                                    <th>Title</th>
-                                    <th>Content</th>
-                                    <th>Image</th>
-                                    <th>Creator</th>
-                                    <th>Created@</th>
-                                    <th>Edit</th>
-                                    <th>Delete</th>
+                                    <th class='text-center center-text'>Sr.</th>
+                                    <th class='text-center center-text'>Title</th>
+                                    <th class='text-center center-text'>Content</th>
+                                    <th class='text-center center-text'>Image</th>
+                                    <th class='text-center center-text'>Creator</th>
+                                    <th class='text-center center-text'>Created@</th>
+                                    <th class='text-center center-text'>Edit</th>
+                                    <th class='text-center cen-cell'>Delete</th>
                                 </tr>
                             </thead>
                         </table>
@@ -57,7 +57,7 @@
                         processing: true,
                         serverSide: true,
                         @if (Route::currentRouteName() === 'posts.index')
-                            ajax: '{!! route("posts.index") !!}',
+                            ajax: '{!! route('posts.index') !!}',
                         @else
                             ajax: '{!! route('posts.my') !!}',
                         @endif
@@ -75,11 +75,11 @@
                                 name: "content"
                             },
                             {
-                                data: "post_image",
-                                name: "post_image",
-                                render: function(data, type, full, meta) {
-                                    return '<img src="' + data + '" alt="Not Available" width="100">';
-                                },
+                                data: "image",
+                                name: "image",
+                                // render: function(data, type, full, meta) {
+                                //     return '<img src="' + data + '" alt="Not Available" width="100">';
+                                // },
                                 orderable: false,
                                 searchable: false,
                             },
@@ -112,10 +112,6 @@
 
         @push('head-script-yajra')
             <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-            <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-                integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-            <script src="https://code.jquery.com/jquery-3.7.0.min.js"
-                integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
-            <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+            {{-- <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script> --}}
         @endpush
 </x-admin.admin-master>

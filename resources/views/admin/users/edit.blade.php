@@ -90,11 +90,12 @@
             <h3 class="text-left mb-4">
                 Roles Action
             </h3>
+
             <div class="col-sm-12">
                 <div class="table-responsive">
                     <table class="table table-bordered" id="roles" width="100%" cellspacing="0">
                         <thead>
-                            <tr >
+                            <tr>
                                 <th class="text-center">Sr.</th>
                                 <th class="text-center">Status</th>
                                 <th class="text-center">Name</th>
@@ -113,7 +114,7 @@
         <script>
             $(document).ready(function() {
                 $('#roles').dataTable({
-                    processing: true,
+                    processing: false,
                     serverSide: true,
                     ajax: '{!! route('users.edit', $user->id) !!}',
                     columns: [{
