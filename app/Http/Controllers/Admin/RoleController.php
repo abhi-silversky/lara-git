@@ -17,7 +17,8 @@ class RoleController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $roles = Role::orderBy('name', 'asc');
+            // $roles = Role::orderBy('name', 'asc');
+            $roles = Role::query();
             return DataTables::eloquent($roles)
                 ->addIndexColumn()
                 ->addColumn('delete', function (Role $role) {
@@ -29,6 +30,7 @@ class RoleController extends Controller
                 ->editColumn('name', function (Role $role) {
                     return view('custom.roles.edit')->with('role', $role);
                 })
+                ->setRowClass('text-center')
                 ->make();
         }
         return view('admin.roles.index');
@@ -80,17 +82,29 @@ class RoleController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Role $role)
+    public function edit(Request $request, Role $role)
     {
         $role->load('permissions');
-        $permissions = Permission::all();
-        return view('admin.roles.edit', compact('role', 'permissions'));
+
+        if ($request->ajax()) {
+            // $roles = Role::orderByDesc('created_at')->newQuery();
+            // $roles = Permission::latest('updated_at');
+            $roles = Permission::query();
+            return DataTables::eloquent($roles)
+                ->addIndexColumn()
+                ->addColumn('status', function (Permission $permission) use ($role) {
+                    return view('custom.roles.has-permission', compact('permission', 'role'));
+                })
+                ->addColumn('attach', function (Permission $permission) use ($role) {
+                    return view('custom.roles.permission-attach', compact('permission', 'role'));
+                })
+                ->addColumn('detach', function (Permission $permission) use ($role) {
+                    return view('custom.roles.permission-detach', compact('permission', 'role'));
+                })
+                ->setRowClass('text-center')
+                ->make();
+        }
+        return view('admin.roles.edit', compact('role'));
     }
 
     /**

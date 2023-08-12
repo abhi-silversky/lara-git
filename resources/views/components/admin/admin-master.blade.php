@@ -389,12 +389,12 @@
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+    integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
 
-    {{-- <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script> --}}
-    <script src='/vendor/jquery/jquery.min.js'></script>
-    {{-- commented bcz i am using yajrabox with js cdn --}}
 
     <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
 
     <!-- Core plugin JavaScript-->
     <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
@@ -405,6 +405,7 @@
 
     @yield('scripts')
     @stack('yajra-scripts')
+
 </body>
 
 </html>

@@ -25,99 +25,95 @@
 
         <div class="row">
             <!-- DataTales Example -->
-            @if ($permissions->isNotEmpty())
-                <div class="col-lg-12">
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h2>Permissions List</h2>
-                            @if (session()->has('error'))
-                                <div class="alert alert-danger">
-                                    <h3>{{ session('error') }}</h3>
-                                </div>
-                            @elseif (session()->has('success'))
-                                <div class="alert alert-success">
-                                    <h3>{{ session('success') }}</h3>
-                                </div>
-                            @elseif (session()->has('warning'))
-                                <div class="alert alert-warning">
-                                    <h3>{{ session('warning') }}</h3>
-                                </div>
-                            @endif
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center">Sr.</th>
-                                            <th class="text-center">Options</th>
-                                            <th class="text-center">Name</th>
-                                            <th class="text-center">slug</th>
-                                            <th class="text-center">Attach</th>
-                                            <th class="text-center">Delete</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        @forelse ($permissions as $permission)
-                                            <tr>
-                                                <td class="text-center"> {{ $loop->iteration }}</td>
-                                                <td class="text-center">
-                                                    <input type="checkbox" name="checkbox" class="checkbox"
-                                                        @foreach ($role->permissions as $role_permission)
-                                                        @if ($role_permission->slug == $permission->slug)
-                                                        checked
-                                                        @endif @endforeach
-                                                        id="">
-                                                </td>
 
-                                                <td class="text-center"> {{ $permission->name }} </td>
-                                                <td class="text-center"> {{ $permission->slug }}</td>
-                                                <td class="text-center">
-                                                    @if (auth()->user()->userHasRole('admin') && $role->permissions->contains($permission))
-                                                        <button class="btn btn-outline-dark">Attach</button>
-                                                    @else
-                                                        <form action="{{ route('roles.attach.permission', $role) }}"
-                                                            method="post">
-                                                            @csrf
-                                                            @method('PATCH')
-                                                            <input type="hidden" name="permission_id"
-                                                                value="{{ $permission->id }}">
-                                                            <button class="btn btn-outline-info" onclick="disableBtn()"
-                                                                id="attach" type="submit">Attach</button>
-                                                        </form>
-                                                    @endif
-                                                </td>
-                                                <td class="text-center">
-                                                    @if (auth()->user()->userHasRole('admin') && $role->permissions->contains($permission))
-                                                        <form action="{{ route('roles.detach.permission', $role) }}"
-                                                            method="post">
-                                                            @csrf
-                                                            @method('PATCH')
-                                                            <input type="hidden" name="permission_id"
-                                                                value="{{ $permission->id }}">
-                                                            <input class="btn btn-outline-danger" type="submit"
-                                                                value="Detach">
-                                                        </form>
-                                                    @else
-                                                        <button class="btn btn-outline-dark">Detach</button>
-                                                    @endif
-                                                </td>
-                                            </tr>
-                                        @empty <tr>
-                                                <td>Emptry array</td>
-                                            </tr>
-                                        @endforelse
-                                    </tbody>
-                                </table>
+            <div class="col-lg-12">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h2>Permissions List</h2>
+                        @if (session()->has('error'))
+                            <div class="alert alert-danger">
+                                <h3>{{ session('error') }}</h3>
                             </div>
+                        @elseif (session()->has('success'))
+                            <div class="alert alert-success">
+                                <h3>{{ session('success') }}</h3>
+                            </div>
+                        @elseif (session()->has('warning'))
+                            <div class="alert alert-warning">
+                                <h3>{{ session('warning') }}</h3>
+                            </div>
+                        @endif
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered" id="permissions" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Sr.</th>
+                                        <th class="text-center">Options</th>
+                                        <th class="text-center">Name</th>
+                                        <th class="text-center">slug</th>
+                                        <th class="text-center">Attach</th>
+                                        <th class="text-center">Delete</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
                     </div>
                 </div>
-            @endif()
-            {{-- {{ $permissions->links('pagination::bootstrap-5') }} --}}
+            </div>
         </div>
+    @endsection
 
+
+    @push('yajra-scripts')
+        <script>
+            $(document).ready(function() {
+                $('#permissions').dataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: '{!! route('admin.roles.edit', $role->id) !!}',
+                    columns: [{
+                            data: "DT_RowIndex",
+                            orderable: false,
+                            searchable: false,
+                        },
+                        {
+                            data: "status",
+                            name: "status",
+                            orderable: false,
+                            searchable: false,
+                        },
+                        {
+                            data: "name",
+                            name: "name"
+                        },
+                        {
+                            data: "slug",
+                            name: "slug",
+                        },
+                        {
+                            data: 'attach',
+                            name: 'attach',
+                            processing: false,
+                            serverSide: false,
+                        },
+                        {
+                            data: 'detach',
+                            name: 'detach',
+                            processing: false,
+                            serverSide: false,
+                        },
+                    ]
+                });
+            });
+        </script>
+    @endpush
+
+    @push('head-script-yajra')
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
         <script src="https://code.jquery.com/jquery-3.7.0.min.js"
             integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
-    @endsection
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    @endpush
 </x-admin.admin-master>

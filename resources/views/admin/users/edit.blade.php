@@ -92,72 +92,69 @@
             </h3>
             <div class="col-sm-12">
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <table class="table table-bordered" id="roles" width="100%" cellspacing="0">
                         <thead>
-                            <tr>
-                                <th>Sr.</th>
-                                <th>Status</th>
-                                <th>Name</th>
-                                <th>slug</th>
-                                <th>Attach</th>
-                                <th>Detach</th>
+                            <tr >
+                                <th class="text-center">Sr.</th>
+                                <th class="text-center">Status</th>
+                                <th class="text-center">Name</th>
+                                <th class="text-center">slug</th>
+                                <th class="text-center">Attach</th>
+                                <th class="text-center">Detach</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @forelse ($roles as $role)
-                                <tr>
-                                    <td> {{ $loop->iteration }}</td>
-                                    <td>
-                                        <input type="checkbox" name="checkbox" class="checkbox"
-                                            @if ($user->roles->contains($role)) checked @endif id="">
-                                    </td>
-
-                                    <td> {{ $role->name }} </td>
-                                    <td> {{ $role->slug }}</td>
-                                    <td>
-                                        @if (auth()->user()->userHasRole('admin') && $user->roles->contains($role))
-                                            <button class="btn btn-outline-dark">Attach</button>
-                                        @else
-                                            <form action="{{ route('user.role.attach', $user) }}" method="post">
-                                                @csrf
-                                                @method('PATCH')
-                                                <input type="hidden" name="role" value="{{ $role->id }}">
-                                                <input class="btn btn-outline-info" type="submit" value="Attach">
-                                            </form>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        @if (auth()->user()->userHasRole('admin') && $user->roles->contains($role))
-                                            <form action="{{ route('user.role.detach', ['user' => $user->id]) }}"
-                                                method="post">
-                                                @csrf
-                                                @method('PATCH')
-                                                <input type="hidden" name="role" value="{{ $role->id }}">
-                                                <input class="btn btn-outline-danger" type="submit" value="Detach">
-                                            </form>
-                                        @else
-                                            <button class="btn btn-outline-dark">Detach</button>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @empty <tr>
-                                    <td>Emptry array</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
                     </table>
                 </div>
             </div>
         </div>
-        <script src="https://code.jquery.com/jquery-3.7.0.min.js"
-            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     @endsection
 
-    @section('scripts')
-        {{-- <script src="{{ asset('js/collapseMenu/users.js') }}"></script> --}}
-        <!-- Page level plugins -->
-        <script src="{{ asset('vendor/datatables/jquery.dataTables.min.js') }}"></script>
-        <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
-        <script src="{{ asset('js/datatable-script.js') }}"></script>
-    @endsection
+    @push('yajra-scripts')
+        <script>
+            $(document).ready(function() {
+                $('#roles').dataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: '{!! route('users.edit', $user->id) !!}',
+                    columns: [{
+                            data: "DT_RowIndex",
+                            orderable: false,
+                            searchable: false,
+                        },
+                        {
+                            data: "status",
+                            name: "status"
+                        },
+                        {
+                            data: "name",
+                            name: "name"
+                        },
+                        {
+                            data: "slug",
+                            name: "slug",
+                        },
+                        {
+                            data: 'attach',
+                            name: 'attach',
+                            processing: false,
+                            serverSide: false,
+                        },
+                        {
+                            data: 'detach',
+                            name: 'detach',
+                            processing: false,
+                            serverSide: false,
+                        },
+                    ]
+                });
+            });
+        </script>
+    @endpush
+
+    @push('head-script-yajra')
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+        <script src="https://code.jquery.com/jquery-3.7.0.min.js"
+            integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+        <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    @endpush
 </x-admin.admin-master>

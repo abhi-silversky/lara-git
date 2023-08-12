@@ -56,7 +56,11 @@
                     $('#posts').dataTable({
                         processing: true,
                         serverSide: true,
-                        ajax: '{!! route('posts.index') !!}',
+                        @if (Route::currentRouteName() === 'posts.index')
+                            ajax: '{!! route("posts.index") !!}',
+                        @else
+                            ajax: '{!! route('posts.my') !!}',
+                        @endif
                         columns: [{
                                 data: "DT_RowIndex",
                                 orderable: false,

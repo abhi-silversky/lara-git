@@ -13,6 +13,7 @@ class PostController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
+            // $posts = Post::orderByDesc('posts.created_at')->with('user');
             $posts = Post::with('user');
             return DataTables::eloquent($posts)
                 ->addIndexColumn()
@@ -123,9 +124,34 @@ class PostController extends Controller
     {
         return view('blog-post', compact('post'));
     }
-    public function myPosts()
+
+
+
+    public function myPosts(Request $request)
     {
-        $posts = auth()->user()->posts()->paginate(10);
-        return view('admin.posts.index', compact('posts'));
+        if ($request->ajax()) {
+            // $user = auth()->user();
+            $posts = Post::where('user_id', auth()->id())->orderByDesc('posts.created_at')->with('user');
+            return DataTables::of($posts)
+                ->addIndexColumn()
+                ->addColumn('image', function (Post $post) {
+                    return view('custom.posts.image-index')->with('post', $post);
+                })
+                ->addColumn('edit', function (Post $post) {
+                    return view('custom.posts.edit')->with('post', $post);
+                })
+                ->addColumn('delete', function (Post $post) {
+                    return view('custom.posts.delete')->with('post', $post);
+                })
+                ->editColumn('created_at', function (Post $post) {
+                    return $post->created_at->diffForHumans();
+                })
+                ->editColumn('title', function (Post $post) {
+                    return view('custom.posts.show')->with('post', $post);
+                })
+                ->make();
+        }
+        return view('admin.posts.index');
+        // return view('admin.posts.index', compact('posts'));
     }
 }

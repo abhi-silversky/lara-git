@@ -22,7 +22,7 @@ class UserController extends Controller
         if ($request->ajax()) {
             $users = User::whereDoesntHave('roles', function (Builder $query) {
                 $query->where('slug', 'admin');
-            });
+            })->latest('updated_at');
             // $users = User::query();
             return DataTables::eloquent($users)
                 ->addIndexColumn()
