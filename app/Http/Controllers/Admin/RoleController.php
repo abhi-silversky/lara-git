@@ -137,12 +137,7 @@ class RoleController extends Controller
     public function attachPermission(Request $request, Role $role)
     {
         try {
-            $role->permissions()->attach($request->permission_id);
-
-            // $status = Role::where('id', $role->id)->whereHas('permissions', function ($q) use ($request) {
-            //     $q->where('id', $request->permission_id);
-            // })->exists();
-            $status = $role->whereHas('permissions', function ($q) use ($request) {
+            $status = Role::whereId($role->id)->whereHas('permissions', function ($q) use ($request) {
                 $q->where('id', $request->permission_id);
             })->exists();
 
@@ -150,11 +145,12 @@ class RoleController extends Controller
                 // session()->flash('success', "Role \"$role->name\" Attached");
                 return redirect()
                     ->route('admin.roles.edit', ['role' => $role->id])
-                    ->with('success', "Permission Attached");
+                    ->with('warning', "Permission already attached");
             }
+            $role->permissions()->attach($request->permission_id);
             return redirect()
                 ->route('admin.roles.edit', ['role' => $role->id])
-                ->with('warning', "Permission Not Attached");
+                ->with('warning', "Permission Attached");
         } catch (\Throwable $th) {
             return redirect()
                 ->route('admin.roles.edit', ['role' => $role->id])
@@ -165,10 +161,18 @@ class RoleController extends Controller
     public function detachPermission(Request $request, Role $role)
     {
         try {
+            $status = Role::whereId($role->id)->whereHas('permissions', function ($q) use ($request) {
+                $q->where('id', $request->permission_id);
+            })->exists();
+            if (!$status) {
+                return redirect()
+                    ->route('admin.roles.edit', ['role' => $role->id])
+                    ->with('warning', "Permission already detached");
+            }
             $role->permissions()->detach($request->permission_id);
             return redirect()
                 ->route('admin.roles.edit', ['role' => $role->id])
-                ->with('success', "Role Detached");
+                ->with('success', "Permission Detached");
         } catch (\Throwable $th) {
             return redirect()
                 ->route('admin.roles.edit', ['role' => $role->id])

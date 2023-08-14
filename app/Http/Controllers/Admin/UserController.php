@@ -141,20 +141,20 @@ class UserController extends Controller
         // $user->roles()->attach($role);
         // return back();
         try {
-            $user->roles()->attach($request->role);
-
-            $status = $user->whereHas('roles', function ($q) use ($request) {
+            $status = User::whereId($user->id)->whereHas('roles', function ($q) use ($request) {
                 $q->where('id', $request->role);
             })->exists();
 
             if ($status) {
                 return redirect()
                     ->route('users.edit', ['user' => $user->id])
-                    ->with('success', "Role \"$user->name\" Attached");
+                    ->with('warning', "Role already attached");
             }
+            $user->roles()->attach($request->role);
+
             return redirect()
                 ->route('users.edit', ['user' => $user->id])
-                ->with('warning', "Role \"$user->name\" Not Attached");
+                ->with('success', "Role Attached");
         } catch (\Throwable $th) {
             return redirect()
                 ->route('users.edit', ['user' => $user->id])
@@ -165,10 +165,18 @@ class UserController extends Controller
     public function detachRole(Request $request, User $user)
     {
         try {
+            $status = User::whereId($user->id)->whereHas('roles', function ($q) use ($request) {
+                $q->where('id', $request->role);
+            })->exists();
+            if (!$status) {
+                return redirect()
+                    ->route('users.edit', ['user' => $user->id])
+                    ->with('warning', "Role already detached");
+            }
             $user->roles()->detach($request->role);
             return redirect()
                 ->route('users.edit', ['user' => $user->id])
-                ->with('success', "Role Detached");
+                ->with('warning', "Role Detached");
         } catch (\Throwable $th) {
             return redirect()
                 ->route('users.edit', ['user' => $user->id])

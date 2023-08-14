@@ -64,9 +64,9 @@ Route::get('/usr', function () {
     // ,'posts.my','admin.permissions.index','admin.roles.index','admin.roles.edit'],true)
 
 
-    $role = Role::find(6);
-    $prm = Permission::find(16);
-    $slug = "delete-post";
+    $user = User::find(186);
+    $role = Role::find(18);
+    // $slug = "delete-post";
 
 
 
@@ -79,8 +79,11 @@ Route::get('/usr', function () {
     // return $roles;
 
     // $roles = $role->permissions->contains($prm);
-    $roles = Role::where('id',6)->whereHas('permissions', function ($q) {
-        $q->where('id', 16);
-    })->exists();
-    ddd($roles);
+    // $user->roles()->attach(18);
+
+    // $status = User::whereId(186)->whereHas('roles', function ($q) use ($role) {
+    //     $q->where('id', $role->id);
+    // })->exists();
+    // dd($status);
+    // ddd($status);
 });
